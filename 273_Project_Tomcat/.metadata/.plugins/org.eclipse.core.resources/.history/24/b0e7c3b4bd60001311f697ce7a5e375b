@@ -1,0 +1,386 @@
+package com.airlinemgmt.DAO;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.airlinemgmt.DB.DBManager;
+import com.airlinemgmt.SQLqueries.SQLquery;
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.beans.FlightDetails;
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Traveller;
+import com.airlinemgmt.cache.CacheObject;
+
+public class FlightDetailsDAO {
+	private Connection conn = null;
+
+	public FlightDetailsDAO() {
+		try {
+			conn = DBManager.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public String validateFlight(FlightDetails flight)
+	{
+		String error=null;
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		boolean result=false;
+		
+		try{
+			String sql="SELECT * FROM FLIGHTDETAILS WHERE FLIGHTNUM='"+flight.getFlightNum()+"' AND AIRLINENAME='"+flight.getAirlineName()+"'";
+			con=DBManager.getConnection();
+			ps=con.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				error="Duplicate Flight Number Provided. Flight already created Src ->"+rs.getString("SRC")+" AND Dest -> "+rs.getString("DEST");
+				break;
+			}
+			
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			if(con!=null)
+			{
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(rs!=null)
+			{
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(ps!=null)
+			{
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	
+	
+		
+		return error;
+		
+	}
+
+	// Fetch details of all flights available in the system
+	public FlightDetails[] getAllFlights(boolean isDB) {
+
+		FlightDetails flightDetails[] = null;
+
+		if (!isDB) {
+			
+			flightDetails=CacheObject.flight;
+
+		} else {
+
+			FlightDetails tempFlightRef;
+			int size = 0;
+			int personId = 0;
+
+			String query = SQLquery.getAllFlights;
+			Statement stmt = null;
+			try {
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				JourneyDAO journeyDAO = new JourneyDAO();
+				ReservationDAO reservationDAO = new ReservationDAO();
+				if (rs != null) {
+					rs.last();
+					size = rs.getRow();
+					if (size == 0) {
+						return null;
+					}
+					flightDetails = new FlightDetails[size];
+					int currRow = 0;
+					rs.beforeFirst();
+					JourneyDAO jDao = new JourneyDAO();
+					while (rs.next()) {
+						System.out.println("Caching Flight");
+						tempFlightRef = new FlightDetails();
+						tempFlightRef.setFlightNum(rs.getString("FlightNum"));
+						System.out.println("Flight Number:"
+								+ rs.getString("FlightNum"));
+						tempFlightRef.setAirlineName(rs
+								.getString("AirlineName"));
+						System.out.println("135");
+						tempFlightRef.setSrc(rs.getString("SRC"));
+						System.out.println("135");
+						tempFlightRef.setDest(rs.getString("DEST"));
+						System.out.println("135");
+						tempFlightRef.setNumOfSeats(Integer.parseInt(rs
+								.getString("NumOfSeats")));
+						System.out.println("135");
+						tempFlightRef.setFlightDate(rs.getString("FlightDate"));
+						System.out.println("135");
+						tempFlightRef.setAvailableSeats((rs
+								.getInt("AVAILABLESEATS")));
+						System.out.println("135");
+						tempFlightRef.setJourneyInfo(journeyDAO
+								.getJourneyInfo(tempFlightRef.getFlightNum()));
+						tempFlightRef
+								.setPassengerInfo(reservationDAO
+										.getPassengerInfo(tempFlightRef
+												.getFlightNum()));
+						flightDetails[currRow] = tempFlightRef;
+						currRow++;
+					}
+				}
+			}
+
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+
+			}
+		}
+		return flightDetails;
+
+	}
+
+	// Returns details of a flight based on search parameter
+	public FlightDetails[] getFlightDetails(String airlineName,
+			String flightNum, String src, String dest, int noOfSeats,
+			String flightDate) {
+		FlightDetails flightDetails[] = null;
+		FlightDetails tempFlightRef;
+		List<FlightDetails> list = new ArrayList<FlightDetails>();
+		try {
+			conn = DBManager.getConnection();
+			if (conn != null) {
+				String sqlQuery = SQLquery.searchFlightDetails;
+				sqlQuery = "SELECT * FROM FLIGHTDETAILS ";
+
+				String addnl = "";
+				if (!airlineName.equalsIgnoreCase("")) {
+					addnl = "AIRLINENAME LIKE'%" + airlineName + "%' ";
+				}
+				if (flightNum != null && (!flightNum.equalsIgnoreCase(""))) {
+					addnl = "AND FLIGHTNUM LIKE'%" + flightNum + "%' ";
+				}
+				if (!src.equalsIgnoreCase("")) {
+					addnl = "AND SRC LIKE'%" + src + "%' ";
+				}
+				if (!dest.equalsIgnoreCase("")) {
+					addnl = "AND DEST LIKE'%" + dest + "%' ";
+				}
+				if (noOfSeats != 0) {
+					addnl = "AND NUMOFSEATS >= " + noOfSeats + "%' ";
+				}
+				if (!flightDate.equalsIgnoreCase("")) {
+					addnl = "AND FLIGHTDATE = '" + flightDate + "%'";
+				}
+				System.out.println(addnl);
+
+				if (addnl.startsWith("AND ")) {
+					addnl = addnl.replaceFirst("AND", " ");
+				}
+				if (!addnl.equalsIgnoreCase("")) {
+					sqlQuery += "WHERE " + addnl;
+				}
+
+				PreparedStatement statement = conn.prepareStatement(sqlQuery);
+				System.out.println(sqlQuery);
+				ResultSet rs = statement.executeQuery();
+
+				JourneyDAO journeyDAO = new JourneyDAO();
+				ReservationDAO reservationDAO = new ReservationDAO();
+				if (true)// If records exist
+				{
+
+					while (rs.next()) {
+						tempFlightRef = new FlightDetails();
+						tempFlightRef.setFlightNum(rs.getString("FlightNum"));
+						System.out.println("Flight Number:"
+								+ rs.getString("FlightNum"));
+						tempFlightRef.setAirlineName(rs
+								.getString("AirlineName"));
+						System.out.println("135");
+						tempFlightRef.setSrc(rs.getString("SRC"));
+						System.out.println("135");
+						tempFlightRef.setDest(rs.getString("DEST"));
+						System.out.println("135");
+						tempFlightRef.setNumOfSeats(Integer.parseInt(rs
+								.getString("NumOfSeats")));
+						System.out.println("135");
+						tempFlightRef.setFlightDate(rs.getString("FlightDate"));
+						System.out.println("135");
+						tempFlightRef.setAvailableSeats((rs
+								.getInt("AVAILABLESEATS")));
+						System.out.println("135");
+						tempFlightRef.setJourneyInfo(journeyDAO
+								.getJourneyInfo(tempFlightRef.getFlightNum()));
+						tempFlightRef
+								.setPassengerInfo(reservationDAO
+										.getPassengerInfo(tempFlightRef
+												.getFlightNum()));
+						for(Journey journey:tempFlightRef.getJourneyInfo())
+						{
+							
+						}
+						list.add(tempFlightRef);
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		flightDetails = new FlightDetails[list.size()];
+		int index = 0;
+		for (FlightDetails fl : list) {
+			flightDetails[index++] = fl;
+		}
+		System.out.println("HERE");
+		return flightDetails;
+
+	}
+
+	public boolean insertFlightDetails(FlightDetails flightDetails) {
+		Connection con = null;
+		PreparedStatement prest = null;
+		boolean result = true;
+		System.out.println("Flight Details DAO insert operation called");
+		try {
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.insertFlightDetails;
+				prest = con.prepareStatement(prepStatement);
+				System.out.println("Inserting the flight Details");
+
+				prest.setString(1, flightDetails.getFlightNum());
+				prest.setString(2, flightDetails.getAirlineName());
+				prest.setString(3, flightDetails.getSrc());
+				prest.setString(4, flightDetails.getDest());
+				prest.setInt(5, flightDetails.getNumOfSeats());
+
+				SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+				java.util.Date date = sdf1.parse(flightDetails.getFlightDate());
+				java.sql.Date sqlStartDate = new Date(date.getTime());
+				prest.setString(6, flightDetails.getFlightDate());
+				prest.setInt(7, flightDetails.getNumOfSeats());
+				prest.executeUpdate();
+				
+				CacheObject.flightList.add(flightDetails);
+				CacheObject.flight = new FlightDetails[CacheObject.flightList
+						.size()];
+				for (int i = 0; i < CacheObject.flightList.size(); i++) {
+					FlightDetails flight = CacheObject.flightList.get(i);
+					CacheObject.flight[i] = flight;
+				}
+				
+				
+				System.out
+						.println("The New Flight Has been added in to the system");
+
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			// result = false;
+
+		}
+
+		JourneyDAO journeyDAO = new JourneyDAO();
+		journeyDAO.processJourneyInfo(flightDetails.getJourneyInfo());
+		return true;
+	}
+
+	public boolean updateFlightDetails(FlightDetails flightDetails)
+			throws ParseException {
+
+		try {
+			if (conn != null) {
+				String updateFlightQuery = SQLquery.updateFlight;
+				PreparedStatement statement = conn
+						.prepareStatement(updateFlightQuery);
+
+				statement.setString(1, flightDetails.getSrc());
+				statement.setString(2, flightDetails.getDest());
+				SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+				java.util.Date date = sdf1.parse(flightDetails.getFlightDate());
+				java.sql.Date sqlStartDate = new Date(date.getTime());
+				statement.setString(3, flightDetails.getFlightDate());
+				statement.setString(4, flightDetails.getAirlineName());
+				statement.setString(5, flightDetails.getNumOfSeats() + "");
+				statement.setString(6, flightDetails.getFlightNum());
+
+				System.out.println(statement.toString());
+				statement.executeUpdate();
+				new JourneyDAO().updateParentJourney(flightDetails
+						.getJourneyInfo()[0]);
+				
+				CacheObject.flightList.add(flightDetails);
+				CacheObject.flight = new FlightDetails[CacheObject.flightList
+						.size()];
+				for (int i = 0; i < CacheObject.flightList.size(); i++) {
+					FlightDetails flight = CacheObject.flightList.get(i);
+					CacheObject.flight[i] = flight;
+				}
+				
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+	public boolean deleteFlight(String flightId) {
+		
+		PreparedStatement statement = null;
+		try {
+			if (conn != null) {
+				statement = conn.prepareStatement(SQLquery.deleteFlight);
+				statement.setString(1, flightId);
+				statement.executeUpdate();
+				CacheObject.getCachedFlights();
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+}

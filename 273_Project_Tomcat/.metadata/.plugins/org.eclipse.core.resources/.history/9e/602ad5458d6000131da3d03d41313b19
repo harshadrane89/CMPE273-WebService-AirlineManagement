@@ -1,0 +1,543 @@
+/**
+ * Person.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
+package com.airlinemgmt.beans;
+
+public class Person  implements java.io.Serializable {
+    private java.lang.String address;
+
+    private java.lang.String city;
+
+    private java.lang.String contactNo;
+
+    private java.lang.String dob;
+
+    private java.lang.String fName;
+
+    private int isActive;
+
+    private java.lang.String lName;
+
+    private java.lang.String password;
+
+    private int personId;
+
+    private java.lang.String roleId;
+
+    private java.lang.String state;
+
+    private java.lang.String userName;
+
+    private java.lang.String zipCode;
+
+    public Person() {
+    }
+
+    public Person(
+           java.lang.String address,
+           java.lang.String city,
+           java.lang.String contactNo,
+           java.lang.String dob,
+           java.lang.String fName,
+           int isActive,
+           java.lang.String lName,
+           java.lang.String password,
+           int personId,
+           java.lang.String roleId,
+           java.lang.String state,
+           java.lang.String userName,
+           java.lang.String zipCode) {
+           this.address = address;
+           this.city = city;
+           this.contactNo = contactNo;
+           this.dob = dob;
+           this.fName = fName;
+           this.isActive = isActive;
+           this.lName = lName;
+           this.password = password;
+           this.personId = personId;
+           this.roleId = roleId;
+           this.state = state;
+           this.userName = userName;
+           this.zipCode = zipCode;
+    }
+
+
+    /**
+     * Gets the address value for this Person.
+     * 
+     * @return address
+     */
+    public java.lang.String getAddress() {
+        return address;
+    }
+
+
+    /**
+     * Sets the address value for this Person.
+     * 
+     * @param address
+     */
+    public void setAddress(java.lang.String address) {
+        this.address = address;
+    }
+
+
+    /**
+     * Gets the city value for this Person.
+     * 
+     * @return city
+     */
+    public java.lang.String getCity() {
+        return city;
+    }
+
+
+    /**
+     * Sets the city value for this Person.
+     * 
+     * @param city
+     */
+    public void setCity(java.lang.String city) {
+        this.city = city;
+    }
+
+
+    /**
+     * Gets the contactNo value for this Person.
+     * 
+     * @return contactNo
+     */
+    public java.lang.String getContactNo() {
+        return contactNo;
+    }
+
+
+    /**
+     * Sets the contactNo value for this Person.
+     * 
+     * @param contactNo
+     */
+    public void setContactNo(java.lang.String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+
+    /**
+     * Gets the dob value for this Person.
+     * 
+     * @return dob
+     */
+    public java.lang.String getDob() {
+        return dob;
+    }
+
+
+    /**
+     * Sets the dob value for this Person.
+     * 
+     * @param dob
+     */
+    public void setDob(java.lang.String dob) {
+        this.dob = dob;
+    }
+
+
+    /**
+     * Gets the fName value for this Person.
+     * 
+     * @return fName
+     */
+    public java.lang.String getFName() {
+        return fName;
+    }
+
+
+    /**
+     * Sets the fName value for this Person.
+     * 
+     * @param fName
+     */
+    public void setFName(java.lang.String fName) {
+        this.fName = fName;
+    }
+
+
+    /**
+     * Gets the isActive value for this Person.
+     * 
+     * @return isActive
+     */
+    public int getIsActive() {
+        return isActive;
+    }
+
+
+    /**
+     * Sets the isActive value for this Person.
+     * 
+     * @param isActive
+     */
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
+
+
+    /**
+     * Gets the lName value for this Person.
+     * 
+     * @return lName
+     */
+    public java.lang.String getLName() {
+        return lName;
+    }
+
+
+    /**
+     * Sets the lName value for this Person.
+     * 
+     * @param lName
+     */
+    public void setLName(java.lang.String lName) {
+        this.lName = lName;
+    }
+
+
+    /**
+     * Gets the password value for this Person.
+     * 
+     * @return password
+     */
+    public java.lang.String getPassword() {
+        return password;
+    }
+
+
+    /**
+     * Sets the password value for this Person.
+     * 
+     * @param password
+     */
+    public void setPassword(java.lang.String password) {
+        this.password = password;
+    }
+
+
+    /**
+     * Gets the personId value for this Person.
+     * 
+     * @return personId
+     */
+    public int getPersonId() {
+        return personId;
+    }
+
+
+    /**
+     * Sets the personId value for this Person.
+     * 
+     * @param personId
+     */
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+
+    /**
+     * Gets the roleId value for this Person.
+     * 
+     * @return roleId
+     */
+    public java.lang.String getRoleId() {
+        return roleId;
+    }
+
+
+    /**
+     * Sets the roleId value for this Person.
+     * 
+     * @param roleId
+     */
+    public void setRoleId(java.lang.String roleId) {
+        this.roleId = roleId;
+    }
+
+
+    /**
+     * Gets the state value for this Person.
+     * 
+     * @return state
+     */
+    public java.lang.String getState() {
+        return state;
+    }
+
+
+    /**
+     * Sets the state value for this Person.
+     * 
+     * @param state
+     */
+    public void setState(java.lang.String state) {
+        this.state = state;
+    }
+
+
+    /**
+     * Gets the userName value for this Person.
+     * 
+     * @return userName
+     */
+    public java.lang.String getUserName() {
+        return userName;
+    }
+
+
+    /**
+     * Sets the userName value for this Person.
+     * 
+     * @param userName
+     */
+    public void setUserName(java.lang.String userName) {
+        this.userName = userName;
+    }
+
+
+    /**
+     * Gets the zipCode value for this Person.
+     * 
+     * @return zipCode
+     */
+    public java.lang.String getZipCode() {
+        return zipCode;
+    }
+
+
+    /**
+     * Sets the zipCode value for this Person.
+     * 
+     * @param zipCode
+     */
+    public void setZipCode(java.lang.String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    private java.lang.Object __equalsCalc = null;
+    public synchronized boolean equals(java.lang.Object obj) {
+        if (!(obj instanceof Person)) return false;
+        Person other = (Person) obj;
+        if (obj == null) return false;
+        if (this == obj) return true;
+        if (__equalsCalc != null) {
+            return (__equalsCalc == obj);
+        }
+        __equalsCalc = obj;
+        boolean _equals;
+        _equals = true && 
+            ((this.address==null && other.getAddress()==null) || 
+             (this.address!=null &&
+              this.address.equals(other.getAddress()))) &&
+            ((this.city==null && other.getCity()==null) || 
+             (this.city!=null &&
+              this.city.equals(other.getCity()))) &&
+            ((this.contactNo==null && other.getContactNo()==null) || 
+             (this.contactNo!=null &&
+              this.contactNo.equals(other.getContactNo()))) &&
+            ((this.dob==null && other.getDob()==null) || 
+             (this.dob!=null &&
+              this.dob.equals(other.getDob()))) &&
+            ((this.fName==null && other.getFName()==null) || 
+             (this.fName!=null &&
+              this.fName.equals(other.getFName()))) &&
+            this.isActive == other.getIsActive() &&
+            ((this.lName==null && other.getLName()==null) || 
+             (this.lName!=null &&
+              this.lName.equals(other.getLName()))) &&
+            ((this.password==null && other.getPassword()==null) || 
+             (this.password!=null &&
+              this.password.equals(other.getPassword()))) &&
+            this.personId == other.getPersonId() &&
+            ((this.roleId==null && other.getRoleId()==null) || 
+             (this.roleId!=null &&
+              this.roleId.equals(other.getRoleId()))) &&
+            ((this.state==null && other.getState()==null) || 
+             (this.state!=null &&
+              this.state.equals(other.getState()))) &&
+            ((this.userName==null && other.getUserName()==null) || 
+             (this.userName!=null &&
+              this.userName.equals(other.getUserName()))) &&
+            ((this.zipCode==null && other.getZipCode()==null) || 
+             (this.zipCode!=null &&
+              this.zipCode.equals(other.getZipCode())));
+        __equalsCalc = null;
+        return _equals;
+    }
+
+    private boolean __hashCodeCalc = false;
+    public synchronized int hashCode() {
+        if (__hashCodeCalc) {
+            return 0;
+        }
+        __hashCodeCalc = true;
+        int _hashCode = 1;
+        if (getAddress() != null) {
+            _hashCode += getAddress().hashCode();
+        }
+        if (getCity() != null) {
+            _hashCode += getCity().hashCode();
+        }
+        if (getContactNo() != null) {
+            _hashCode += getContactNo().hashCode();
+        }
+        if (getDob() != null) {
+            _hashCode += getDob().hashCode();
+        }
+        if (getFName() != null) {
+            _hashCode += getFName().hashCode();
+        }
+        _hashCode += getIsActive();
+        if (getLName() != null) {
+            _hashCode += getLName().hashCode();
+        }
+        if (getPassword() != null) {
+            _hashCode += getPassword().hashCode();
+        }
+        _hashCode += getPersonId();
+        if (getRoleId() != null) {
+            _hashCode += getRoleId().hashCode();
+        }
+        if (getState() != null) {
+            _hashCode += getState().hashCode();
+        }
+        if (getUserName() != null) {
+            _hashCode += getUserName().hashCode();
+        }
+        if (getZipCode() != null) {
+            _hashCode += getZipCode().hashCode();
+        }
+        __hashCodeCalc = false;
+        return _hashCode;
+    }
+
+    // Type metadata
+    private static org.apache.axis.description.TypeDesc typeDesc =
+        new org.apache.axis.description.TypeDesc(Person.class, true);
+
+    static {
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "Person"));
+        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("address");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "address"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("city");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "city"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("contactNo");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "contactNo"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("dob");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "dob"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("FName");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "fName"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("isActive");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "isActive"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("LName");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "lName"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("password");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "password"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("personId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "personId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("roleId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "roleId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("state");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "state"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("userName");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "userName"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("zipCode");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://beans.airlinemgmt.com", "zipCode"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+    }
+
+    /**
+     * Return type metadata object
+     */
+    public static org.apache.axis.description.TypeDesc getTypeDesc() {
+        return typeDesc;
+    }
+
+    /**
+     * Get Custom Serializer
+     */
+    public static org.apache.axis.encoding.Serializer getSerializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanSerializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
+    /**
+     * Get Custom Deserializer
+     */
+    public static org.apache.axis.encoding.Deserializer getDeserializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanDeserializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
+}

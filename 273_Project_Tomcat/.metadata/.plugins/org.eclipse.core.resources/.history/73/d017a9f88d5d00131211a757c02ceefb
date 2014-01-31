@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/com/airlinemgmt/beans/AirlineEmployee.java=UTF-8
+encoding//src/com/airlinemgmt/beans/FlightDetails.java=UTF-8
+encoding//src/com/airlinemgmt/beans/Journey.java=UTF-8
+encoding//src/com/airlinemgmt/beans/Payment.java=UTF-8
+encoding//src/com/airlinemgmt/beans/Person.java=UTF-8
+encoding//src/com/airlinemgmt/beans/Traveller.java=UTF-8
+encoding//src/com/airlinemgmt/service/AirlineMgmtService.java=UTF-8
+encoding//src/com/airlinemgmt/service/AirlineMgmtServiceService.java=UTF-8
+encoding//src/com/airlinemgmt/service/AirlineMgmtServiceServiceLocator.java=UTF-8

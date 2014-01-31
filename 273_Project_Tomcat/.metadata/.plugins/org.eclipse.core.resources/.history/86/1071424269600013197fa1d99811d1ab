@@ -1,0 +1,64 @@
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form method ="post" name = "myForm" action="SearchEmployeeByAttributes">
+	<table>
+		<tr>
+			<td>SSN</td>
+			<td>Work Description</td>
+			<td>Position</td>
+			<td>Hire Date</td>
+			<td><input type="submit" value="Search"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="SSN"></td>
+			<td><input type="text" name="workDesc"></td>
+			<td><input type="text" name="woekPosition"></td>
+			<td><input type="text" name="hireDate"></td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+	<%
+		AirlineEmployee employee = (AirlineEmployee)request.getAttribute("employee");
+		if( employee != null){
+	 %>
+	 	<table>
+	 		<tr>
+	 			<td>SSN</td>
+	 			<td>First name</td>
+	 			<td>Last Name</td>
+	 			<td>Address</td>
+	 			<td>City</td>
+	 			<td>Contact No</td>
+	 			<td>WorkDescription</td>
+	 			<td>Work Position</td>
+	 			<td>Hire Date</td>
+	 		</tr>
+	 		<tr>
+	 			<td><% employee.getSSN(); %></td>
+	 			<td><% employee.getfName();%></td>
+	 			<td><% employee.getlName();%></td>
+	 			<td><% employee.getAddress(); %></td>
+	 			<td><% employee.getWorkDesc();%></td>
+	 			<td><% employee.getContactNo(); %></td>
+	 			<td><% employee.getWorkDesc();%></td>
+	 			<td><% employee.getPosition(); %></td>
+	 			<td><% employee.getHireDate(); %></td>
+	 			
+	 		</tr>
+	 	</table>
+	 <%
+	 	} 
+	 %>
+
+</body>
+</html>

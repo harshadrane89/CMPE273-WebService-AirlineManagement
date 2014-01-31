@@ -1,0 +1,55 @@
+package com.airlinemgmt.controller;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+/**
+ * Servlet implementation class SearchEmployeeId
+ */
+public class SearchEmployeeId extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private AirlineMgmtServiceProxy proxy;
+	private AirlineEmployee emp;
+
+    public SearchEmployeeId() {
+        super();
+        emp = new AirlineEmployee();
+        proxy = new AirlineMgmtServiceProxy();
+        proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+    }
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		processRequest(request, response);
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		emp.setPersonId(Integer.parseInt(request.getParameter("personId")));
+		processRequest(request, response);
+	}
+
+	private AirlineEmployee processRequest(HttpServletRequest request, HttpServletResponse response) {
+		
+		AirlineEmployee employee = null;
+		try {
+			employee = proxy.getEmployeeDetails(emp);
+			request.setAttribute("airlineEmployee", employee);
+			request.getRequestDispatcher("UpdateDeleteEmployee.jsp").forward(request, response);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return employee;
+	}
+}

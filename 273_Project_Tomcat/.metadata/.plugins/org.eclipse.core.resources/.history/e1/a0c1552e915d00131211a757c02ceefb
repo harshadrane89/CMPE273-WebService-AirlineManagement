@@ -1,0 +1,67 @@
+package com.airlinemgmt.controller;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+/**
+ * Servlet implementation class EmployeeServlet
+ */
+public class EmployeeServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private AirlineEmployee airlineEmployee;
+	private AirlineMgmtServiceProxy proxy;
+	
+	 
+    public EmployeeServlet() {
+       airlineEmployee = new AirlineEmployee();
+       proxy = new AirlineMgmtServiceProxy();
+       proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+    }
+    
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+
+    	try {
+			if(proxy.addUpdateEmployee(airlineEmployee, "insert")){
+				System.out.println("Add employee success");
+			} else {
+				System.out.println("Add employee fails");
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+    }
+
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//airlineEmployee.setUserName(request.getParameter("userName"));
+		//airlineEmployee.setPassword(request.getParameter("password"));
+		airlineEmployee.setFName(request.getParameter("fName"));
+		airlineEmployee.setLName(request.getParameter("lName"));
+		airlineEmployee.setAddress(request.getParameter("address"));
+		airlineEmployee.setCity(request.getParameter("city"));
+		airlineEmployee.setState(request.getParameter("state"));
+		airlineEmployee.setZipCode(request.getParameter("zipCode"));
+		airlineEmployee.setDob(request.getParameter("dob"));
+		airlineEmployee.setContactNo(request.getParameter("contactNo"));
+		
+		//airlineEmployee.setSSN(request.getParameter("ssn"));
+		airlineEmployee.setWorkDesc(request.getParameter("workDesc"));
+		airlineEmployee.setHireDate(request.getParameter("hireDate"));
+		airlineEmployee.setPosition(request.getParameter("workPosition"));
+		processRequest(request, response);
+	}
+
+}

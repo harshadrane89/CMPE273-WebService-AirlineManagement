@@ -1,0 +1,175 @@
+package com.airlinemgmt.validations;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.airlinemgmt.DAO.CustomerDAO;
+import com.airlinemgmt.beans.Traveller;
+
+public class Validations {
+
+	public boolean verifySSN(String ssn) throws Exception {
+
+		// Initialize reg expression for SSN.
+		System.out.println(ssn);
+		String expression = "^\\d{3}[- ]\\d{2}[- ]\\d{4}$";
+		CharSequence inputStr = ssn;
+		Pattern pattern = Pattern.compile(expression);
+		Matcher matcher = pattern.matcher(inputStr);
+
+		if (matcher.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean verifyInt(String str) {
+		if (str.length() > 0) {
+			for (char c : str.toCharArray()) {
+				if (!Character.isDigit(c))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean verifyStringAndInt(String str) {
+		if (str.length() > 0) {
+			for (char c : str.toCharArray()) {
+				if (!Character.isDigit(c)) {
+					return false;
+				} else if (!str.matches("[a-zA-Z]*")) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean verifyString(String string) {
+		string = string.trim();
+
+		if (string == null || string.equals(""))
+			return false;
+
+		if (!string.matches("[a-zA-Z]*"))
+			return false;
+
+		return true;
+	}
+
+	public boolean verifyEmail(String email) {
+		String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+		email = email.trim();
+
+		if (email == null || email.equals(""))
+			return false;
+
+		if (!email.matches(regex))
+			return false;
+
+		return true;
+	}
+
+	public boolean verifyZipCode(String zipCode) {
+
+		String regex = "^\\d{5}(-\\d{4})?$";
+		zipCode = zipCode.trim();
+
+		if (zipCode == null || zipCode.equals("")) {
+			return false;
+		}
+
+		if (zipCode.matches(regex)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean verifyContactNo(String contactNo) {
+
+		contactNo = contactNo.trim();
+		String regex = "^(?>\\(\\d{3}\\) ?|\\d{3}[.-]?)?\\d{3}[.-]?\\d{4}$";
+
+		if (contactNo == null || contactNo.equals("")) {
+			return false;
+		}
+
+		// Pattern pattern = Pattern.compile("\\d{3}-\\d{7}");
+		if (contactNo.matches(regex)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean verifyDate(String dateToValidate, String dateFromat) {
+
+		if (dateToValidate == null || dateToValidate.equals("")) {
+			return false;
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFromat);
+		sdf.setLenient(false);
+
+		try {
+			Date date = sdf.parse(dateToValidate);
+			System.out.println(date);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public static Traveller[] getCustomerDetails(String input) {
+		StringTokenizer strTokenizer = new StringTokenizer(input, ":");
+		String fname = null, lname = null, state = null, city = null, username = null;
+		CustomerDAO CustomerDao = new CustomerDAO();
+		Traveller[] customerList = null;
+		while (strTokenizer.hasMoreTokens()) {
+			String token = strTokenizer.nextToken();
+			if (token.equals("fname")) {
+				// System.out.println("fname = " + strTokenizer.nextToken());
+				fname = strTokenizer.nextToken();
+				customerList = CustomerDao.searchByName(fname);
+			} else if (token.equals("lname")) {
+				lname = strTokenizer.nextToken();
+				customerList = CustomerDao.searchByLastName(lname);
+			} else if (token.equals("state")) {
+
+				state = strTokenizer.nextToken();
+				customerList = CustomerDao.searchByState(state);
+			} else if (token.equals("city")) {
+
+				city = strTokenizer.nextToken();
+				customerList = CustomerDao.searchByCity(city);
+			} else if (token.equals("username")) {
+
+				username = strTokenizer.nextToken();
+				customerList = CustomerDao.viewProfile(username);
+			}
+		}
+
+		return customerList;
+	}
+	
+	
+	public static void main(String[] args) {
+		
+		try {
+			System.out.println(new Validations().verifySSN("123-123-1234"));	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+}

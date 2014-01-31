@@ -1,0 +1,102 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<title>Employee Details</title>
+<style>
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Employee</title>
+</head>
+<body>
+ <form method ="post" name = "myForm" action="EmployeeServlet">
+	<table>
+		<tr>
+			<td>User Name</td>
+			<td><input type = "text" name = "userName" value = "anup"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Password</td>
+			<td><input type = "password" name = "password" value = "anup"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>SSN</td>
+			<td><input type = "text" name = "ssn" value = "123-12-1234"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>First Name</td>
+			<td><input type = "text" name = "fName" value = "anup"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Last Name</td>
+			<td><input type = "text" name = "lName" value = "anup"></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>Address</td>
+			<td><input type="text" name="address" value = "anup"/></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>City</td>
+			<td><input type="text" name="city" value = "anup"/></td>
+			<td>a</td>
+		</tr>	
+		<tr>
+			<td>State</td>
+			<td><input type="text" name="state" value = "anup"></td>
+			<td>a</td>
+		</tr>	
+		<tr>
+			<td>Zip Code</td>
+			<td><input type="text" name="zipCode" value = "95112"/></td>
+			<td>a</td>
+		</tr>	
+		<tr>
+			<td>DOB</td>
+			<td><input type="text" name="dob" value = "12-12-2012"/></td>
+			<td>a</td>
+		</tr>
+		<tr>
+			<td>Contact No</td>
+			<td><input type="text" name="contactNo"value = "123-123-1234"/></td>
+			<td>a</td>
+		</tr>
+		<tr>
+			<td>Work Description</td>
+			<td><input type="text" name="workDesc" value = "anup"/></td>
+			<td>a</td>
+		</tr>
+		<tr>
+			<td>Hire Date</td>
+			<td><input type="text" name="hireDate" value ="12-12-2012"/></td>
+			<td>a</td>
+		</tr>
+		<tr>
+			<td>Work Position</td>
+			<td><input type="text" name="workPosition" value = "anup"/></td>
+			<td>a</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="Submit"/></td>
+			<td></td>
+		</tr>
+	</table>
+  </form>
+</body>
+</html>

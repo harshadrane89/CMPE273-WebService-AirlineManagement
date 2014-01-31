@@ -1,0 +1,133 @@
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@page import="com.airlinemgmt.beans.Reservation"%>
+<%@page import="com.airlinemgmt.beans.Journey"%>
+<%@page import="com.airlinemgmt.beans.FlightDetails"%>
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+<title>Insert title here</title>
+</head>
+<body>
+	<table cellpadding="10px" cellspacing="10px">
+		<tr>
+			<td></td>
+			<td>
+				<%
+					Reservation[] rArray = null;
+					if (session.getAttribute("rList") != null) {
+						rArray = (Reservation[]) session.getAttribute("rList");
+					}
+				%> <%
+ 	if (rArray != null) {
+ 		if (rArray.length > 0) {
+ %>
+				<table class="well" width="800px" cellpadding="10px" align="center">
+					<%
+						int k = 0;
+								for (Reservation reservation : rArray) {
+									{
+					%>
+					<tr>
+						<td>
+							<div class="well">
+
+								<h3>
+									Airline -
+									<%=reservation.getJourneyInfo().getAirline()%></h3>
+								<br>
+								<h3>
+									Flight Number -
+									<%=reservation.getJourneyInfo()
+									.getFlightNum()%></h3>
+								<br>
+								<h4><%=reservation.getJourneyInfo()
+									.getBoardingPoint()%>
+									--><%=reservation.getJourneyInfo()
+									.getDestinationPoint()%></h4>
+								<br> Travel Date -
+								<%=reservation.getJourneyInfo()
+									.getDepartureDate()%>
+
+								<br> Fare -
+								<%=reservation.getJourneyInfo().getFare()%>
+
+								<br>
+								<h3>
+									Reservation Id : ABX - 123 -<%=reservation.getReservationId()%></h3>
+								<br>
+								<h4>
+									Customer Name -
+									<%=reservation.getTraveller().getfName()%>&nbsp;<%=reservation.getTraveller().getlName()%>
+								</h4>
+								<br>
+								<h4>
+									Contact Info -
+									<%=reservation.getTraveller().getContactNo()%>
+								</h4>
+								<br>
+								<div>
+								<p>
+								<p>Passenger Info</p>
+
+								<%
+									for (Traveller obj : reservation.getPassenger()) {
+														if (obj != null) {
+								%>
+								<p>
+									Name
+									<%=obj.getfName()%>&nbsp;<%=obj.getlName()%>&nbsp;
+								</p>
+								<p>
+									Identification -
+									<%=obj.getNationality()%></p>
+								<p>
+									Identification Info -
+									<%=obj.getPassNum()%>
+								</p>
+									<%
+										}
+									%>
+									</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<form action="../ReservationProcessor" method="post">
+								<input type="submit" value="Delete" class="btn btn-danger"
+									name=<%=k%>>
+							</form>
+						</td>
+					</tr>
+					<%
+						}
+										k++;
+									}
+								}
+							}
+						}
+					%>
+
+
+				</table>
+
+
+
+
+
+
+
+
+
+
+
+
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

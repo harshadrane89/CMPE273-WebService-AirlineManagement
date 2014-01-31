@@ -1,0 +1,150 @@
+package com.airlinemgmt.controller;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.airlinemgmt.beans.FlightDetails;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+/**
+ * Servlet implementation class FlightDetailsServlet
+ */
+public class FlightDetailsServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private    AirlineMgmtServiceProxy  proxy;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FlightDetailsServlet() {
+        super();
+       proxy = new AirlineMgmtServiceProxy();		
+    
+		  proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+
+		
+		 if (request.getParameter("btnSearch") != null) {           
+			try {
+				System.out.println("Search method called");
+				searchFlight(request,response);
+		
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+	}
+		 
+			
+		 if (request.getParameter("btnAddNewFlight") != null) {           
+			try {
+				System.out.println("Add New Flight method called");
+				addNewFlight(request,response);
+			/**/
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+	}
+
+}
+	
+	public void searchFlight(HttpServletRequest request,HttpServletResponse response)
+	{
+		
+		  
+	       com.airlinemgmt.beans.FlightDetails flight[]=null;
+	       FlightDetails flightDetails=null;
+	       String flightNum;
+	       String airline;
+	       String from;
+	       String to;
+	       String dateTime;
+	       int noOfSeats = 0;
+	       
+	     
+	      
+	        try {
+	        	System.out.println("Calling getflightDetails method");
+	        	
+	        	airline=request.getParameter("txtAirlineName");
+	        	flightNum=(request.getParameter("txtFlightNum"));
+	    		
+	    		from=request.getParameter("txtFrom");
+	    		to=request.getParameter("txtDestination");
+	    		if(!request.getParameter("txtSeatsCount").equalsIgnoreCase(""))
+	    		noOfSeats=Integer.parseInt(request.getParameter("txtSeatsCount"));
+	    		
+	    		dateTime=request.getParameter("txtDateTime");
+				flight=proxy.getFlightDetails(airline,flightNum,from,to,noOfSeats,dateTime );
+			
+		
+				 	    request.setAttribute("flightDetails", flight);
+				 	   request.getRequestDispatcher("FlightDetails.jsp").forward(request,
+								response);	
+				   
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println("Exception:"+ e);
+				e.printStackTrace();
+			}
+
+	}
+	
+	
+	public void addNewFlight(HttpServletRequest request,HttpServletResponse response) throws RemoteException
+	{
+		try{
+		
+		FlightDetails flightDetails = new FlightDetails();
+		flightDetails.setAirlineName(request.getParameter("txtAirlineName"));
+		
+		flightDetails.setSrc(request.getParameter("txtFrom"));
+		flightDetails.setDest(request.getParameter("txtDestination"));
+		flightDetails.setNumOfSeats(Integer.parseInt(request.getParameter("txtSeatsCount")));
+		flightDetails.setFlightDate((request.getParameter("txtDateTime")));
+		
+		//proxy.addUpdateFlight(flight, operation)
+		if(proxy.addUpdateFlight(flightDetails, "insert"))
+		{
+			System.out.println("New Flight Added Successfully into the system");
+			request.getRequestDispatcher("FlightDetails.jsp").forward(request,
+					response);	
+		}
+		else{
+			
+			System.out.println("Flight addition failed...");
+		}
+			
+		}catch(Exception e)
+		{
+			System.out.println("Exception:"+e);
+			System.out.println("New Fligt Addition Failed");
+		}
+	}
+		
+	}
+
+

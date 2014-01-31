@@ -1,0 +1,112 @@
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+	<%
+		Traveller traveller = new Traveller();
+
+		if (session.getAttribute("tObj") != null) {
+			traveller = (Traveller) session.getAttribute("tObj");
+		}
+	%>
+	<center>
+		<h2>View Customer</h2>
+	</center>
+
+	<center>
+		<h3>Personal Details</h3>
+
+		<table cellpadding="10px" cellspacing="10px" class="well">
+			<tr>
+				<td>Name</td>
+				<td><%=traveller.getfName()%></td>
+				<td><%=traveller.getlName()%></td>
+			</tr>
+			<tr>
+				<td>SSN</td>
+				<td><%=traveller.getCustId()%></td>
+			</tr>
+			<tr>
+				<td>Date of Birth</td>
+				<td><%=traveller.getDob()%></td>
+			</tr>
+			<tr>
+				<td>Contact Information</td>
+				<td><%=traveller.getContactNo()%></td>
+			</tr>
+			<tr>
+				<td>Address</td>
+				<td><%=traveller.getAddress()%></td>
+			</tr>
+			<tr>
+				<td>City</td>
+				<td><%=traveller.getCity()%></td>
+			</tr>
+			<tr>
+				<td>State</td>
+				<td><%=traveller.getState()%></td>
+			</tr>
+			<tr>
+				<td>Zip Code</td>
+				<td><%=traveller.getZipCode()%></td>
+			</tr>
+		</table>
+
+	</center>
+	<br>
+	<br>
+
+	<center>
+		<h3>Traveller Information</h3>
+		<table cellpadding="10px" cellspacing="10px" class="well">
+			<tr>
+				<td>Nationality</td>
+				<td>
+				<td><%=traveller.getNationality()%></td>
+			</tr>
+			<tr>
+				<td>Passport Number</td>
+				<td>
+				<td><%=traveller.getPassNum()%></td>
+			</tr>
+
+		</table>
+	</center>
+	<br>
+	<br>
+
+	<center>
+		<h3>Account Information</h3>
+		<table cellpadding="10px" cellspacing="10px" class="well">
+			<tr>
+				<td>Username</td>
+				<td><%=traveller.getUserName()%></td>
+			</tr>
+
+		</table>
+	</center>
+
+
+	<table>
+		<tr>
+			<form action="../CustomerViewProcessor" method="get">
+				<input type="submit" class="btn btn-success" value="Edit/Update">
+			</form>
+			&nbsp; &nbsp; &nbsp; &nbsp;
+			<form action="../CustomerViewProcessor" method="post">
+				<input type="submit" class="btn btn-success" value="Delete">
+			</form>
+		</tr>
+	</table>
+
+
+</body>
+</html>

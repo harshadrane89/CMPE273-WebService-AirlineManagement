@@ -1,0 +1,161 @@
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@page import="com.airlinemgmt.beans.Journey"%>
+<%@page import="com.airlinemgmt.beans.FlightDetails"%>
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+	<%
+		FlightDetails flight = new FlightDetails();
+
+		if (session.getAttribute("flightObj") != null) {
+			flight = (FlightDetails) session.getAttribute("flightObj");
+		}
+	%>
+	<center>
+		<h2>View Flight</h2>
+	</center>
+
+	<center>
+			<h3>Flight Details</h3>
+
+			<table cellpadding="10px" cellspacing="10px" class="well">
+				<tr>
+					<td>Airline</td>
+					<td><%=flight.getAirlineName()%></td>
+				</tr>
+				<tr>
+					<td>Flight Number</td>
+					<td><%=flight.getFlightNum()%></td>
+				</tr>
+				<tr>
+					<td>Source</td>
+					<td><%=flight.getSrc()%></td>
+				</tr>
+				<tr>
+					<td>Destination</td>
+					<td><%=flight.getDest()%>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Flight Date</td>
+					<td><%=flight.getFlightDate()%>
+					</td>
+				</tr>
+				<tr>
+					<td> Number of Seats</td>
+					<td><%=flight.getNumOfSeats()%>
+					</td>
+				</tr>
+					<tr>
+					<td>Available Seats</td>
+					<td><%=flight.getAvailableSeats()%>
+					</td>
+				</tr>
+				
+			</table>
+	
+	</center>
+	<br>
+	<br>
+	<%
+			if (flight.getJourneyInfo() != null) {
+					Journey[] journey = flight.getJourneyInfo();
+		%>
+		<center>
+			<h4>Journeys For The Flight</h4>
+			<table class="table-striped" width="800px" cellpadding="10px">
+				<thead>
+					<tr>
+					
+						<td><b>Source</b></td>
+						<td><b>Destination</b></td>
+						<td><b>Take - Off Date</b></td>
+						<td><b>Landing Date</b></td>
+						<td><b>Fare</b></td>
+					</tr>
+					<tr>
+						<td><%=journey[0].getBoardingPoint()%></td>
+						<td><%=journey[0].getDestinationPoint()%></td>
+						<td><%=journey[0].getDepartureDate()%></td>
+						<td><%=journey[0].getArrivalDate()%></td>
+						<td><%=journey[0].getFare()%></td>
+					</tr>
+					<%
+						for (int i = 1; i < journey.length; i++) {
+					%>
+					<tr>
+						<td><%=journey[i].getBoardingPoint()%></td>
+						<td><%=journey[i].getDestinationPoint()%></td>
+						<td><%=journey[i].getDepartureDate()%></td>
+						<td><%=journey[i].getArrivalDate()%></td>
+						<td><%=journey[i].getFare()%></td>
+						<td>
+							<form action="../JournetProcessor" method="get">
+								<input type="submit" value="Delete" name="<%=i%>" class="btn btn-danger">
+							</form>
+						</td>
+					</tr>
+
+					<%
+						}
+					%>
+				
+			</table>
+		</center>
+
+
+		<%
+			}
+			
+		%>
+		<%
+			if (flight.getPassengerInfo() != null) {
+					Traveller[] journey = flight.getPassengerInfo();
+					if(journey.length>0){
+		%>
+		<center>
+			<h4>Passenger Information</h4>
+			<table class="table-striped" width="800px" cellpadding="10px">
+				<thead>
+					<tr>
+					
+						<td><b>Name</b></td>
+						<td><b>Identification</b></td>
+						<td><b>Identification Info</b></td>
+					</tr>
+					
+					<%
+						for (int i = 1; i < journey.length; i++) {
+					%>
+					<tr>
+						<td><%=journey[i].getfName()%>&nbsp;<%=journey[i].getlName()%></td>
+						<td><%=journey[i].getNationality()%></td>
+						<td><%=journey[i].getPassNum()%></td>
+					
+					</tr>
+
+					<%
+						}
+					%>
+				
+			</table>
+		</center>
+
+
+		<%
+			}}
+			
+		%>
+	
+	
+</body>
+</html>

@@ -1,0 +1,91 @@
+package com.airlinemgmt.container;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.airlinemgmt.beans.FlightDetails;
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Traveller;
+
+/**
+ * Servlet implementation class FlightProcessorServlet
+ */
+@WebServlet("/FlightProcessorServlet")
+public class FlightProcessorServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FlightProcessorServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		HttpSession session=request.getSession();
+		FlightDetails[] flightObj=(FlightDetails[])session.getAttribute(arg0)("fList");
+		
+		FlightDetails flight=new FlightDetails();
+		flight.setAirlineName((String)request.getParameter("fName"));
+		flight.setSrc((String)request.getParameter("fSource"));
+		flight.setDest((String)request.getParameter("fDestn"));
+		flight.setFlightDate((String)request.getParameter("fDate"));
+		flight.setNumOfSeats(Integer.parseInt(request.getParameter("fSeats")));
+		
+		int index=0;
+		for(int i=0;i<flightObj.length;i++)
+		{
+			if(flightObj[i].getFlightNum().equalsIgnoreCase(flight.getFlightNum()))
+			{
+				index=i;
+			}
+		}
+		flightObj[index]=flight;
+		session.setAttribute("tList",flightObj);
+		session.setAttribute("tObj", flight);
+		session.setAttribute("destination", "/TwitterGUI/ViewFlight.jsp");
+		response.sendRedirect("/TwitterGUI/Dashboard.jsp");
+	
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session=request.getSession();
+		
+		FlightDetails flight=new FlightDetails();
+		flight.setFlightNum((String)request.getAttribute("fNum"));
+		flight.setAirlineName((String)request.getAttribute("fName"));
+		flight.setSrc((String)request.getAttribute("fSource"));
+		flight.setDest((String)request.getAttribute("fDestn"));
+		flight.setFlightDate((String)request.getAttribute("fTDate"));
+		flight.setFlightNum((String)request.getAttribute("fNum"));
+		Journey[] ref=new Journey[1];
+		ref[0].setFlightNum(flight.getFlightNum());
+		ref[0].setBoardingPoint(flight.getSrc());
+		ref[0].setDestinationPoint(flight.getDest());
+		ref[0].setDepartureDate(flight.getFlightDate());
+		ref[0].setArrivalDate((String)request.getAttribute("fLDate"));
+		ref[0].setFare((float)request.getAttribute("fare"));
+		ref[0].setIsActive(1);
+		flight.setJourneyInfo(ref);
+		session.setAttribute("newFlight", flight);
+		flight.setNumOfSeats(Integer.parseInt((String)request.getAttribute("fSeats")));
+		session.setAttribute("destination", "/TwitterGUI/AddJourney.jsp");
+		response.sendRedirect("/TwitterGUI/Dashboard.jsp");
+	}
+
+}

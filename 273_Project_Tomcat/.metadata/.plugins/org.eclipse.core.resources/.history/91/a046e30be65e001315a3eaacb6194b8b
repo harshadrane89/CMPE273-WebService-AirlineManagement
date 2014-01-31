@@ -1,0 +1,45 @@
+package com.airlinemgmt.beans;
+
+public class Reservation {
+
+	private int reservationId;
+	private int journeyId;
+	private String reservationDate;
+	private int paymentId;
+	private int ticketId;
+	private Traveller[] passenger;
+	
+	
+	public int getPaymentId() {
+		return paymentId;
+	}
+	public void setPaymentId(int paymentId) {
+		this.paymentId = paymentId;
+	}
+	public int getTicketId() {
+		return ticketId;
+	}
+	public void setTicketId(int ticketId) {
+		this.ticketId = ticketId;
+	}
+	public int getReservationId() {
+		return reservationId;
+	}
+	public void setReservationId(int reservationId) {
+		this.reservationId = reservationId;
+	}
+	public int getJourneyId() {
+		return journeyId;
+	}
+	public void setJourneyId(int journeyId) {
+		this.journeyId = journeyId;
+	}
+	public String getReservationDate() {
+		return reservationDate;
+	}
+	public void setReservationDate(String reservationDate) {
+		this.reservationDate = reservationDate;
+	}
+	
+	
+}

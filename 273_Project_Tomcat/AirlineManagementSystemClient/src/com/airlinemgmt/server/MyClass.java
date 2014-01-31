@@ -1,0 +1,40 @@
+package com.airlinemgmt.server;
+
+import java.rmi.RemoteException;
+
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+public  class MyClass {
+	public static Reservation[] reservationArr;
+	public MyClass() {
+		// TODO Auto-generated constructor stub
+		AirlineMgmtServiceProxy proxy;
+		proxy = new AirlineMgmtServiceProxy();
+		System.out.println("***proxy initialized******" + proxy);
+		proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+		System.out.println("***proxy******" + proxy.hashCode());
+		try {
+			reservationArr = (Reservation[]) proxy.getReservation(null);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+
+		// TODO Auto-generated constructor stub
+		AirlineMgmtServiceProxy proxy;
+		proxy = new AirlineMgmtServiceProxy();
+		System.out.println("***proxy initialized******" + proxy);
+		proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+		System.out.println("***proxy******" + proxy.hashCode());
+		try {
+			reservationArr = (Reservation[]) proxy.getReservation(null);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

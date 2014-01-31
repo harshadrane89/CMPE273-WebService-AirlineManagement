@@ -1,0 +1,114 @@
+package com.airlinemgmt.container;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.beans.Traveller;
+
+/**
+ * Servlet implementation class PassengerInfoServlet
+ */
+public class PassengerInfoServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public PassengerInfoServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		
+		HttpSession session=request.getSession();
+		List<Traveller> travellerObj=(List<Traveller>)session.getAttribute("passengerList");
+		int index=0;
+		for(int i=0;i<travellerObj.size();i++)
+		{
+			
+			if(request.getParameter(i+"")!=null)
+			{
+				index=i;
+				break;
+			}
+		}
+		
+		travellerObj.remove(index);
+		
+		Reservation reservation =(Reservation)session.getAttribute("myReservation");
+		float fare=reservation.getJourneyInfo().getFare();
+		reservation.setPassenger((Traveller[])travellerObj.toArray());
+		session.setAttribute("fare", (fare*travellerObj.size())+"");
+		reservation.setFare((fare*travellerObj.size()));
+		session.setAttribute("myReservation", reservation);
+		session.setAttribute("passengerList", travellerObj);
+		session.setAttribute("destination", "/TwitterGUI/PassengerInfo.jsp");
+		session.setAttribute("leftNavBar", null);
+		response.sendRedirect("TwitterGUI/Dashboard.jsp");
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		
+		HttpSession session = request.getSession();
+		Reservation reservation =(Reservation)session.getAttribute("myReservation");
+		float fare=reservation.getJourneyInfo().getFare();
+		Traveller traveller = new Traveller();
+		traveller.setfName(request.getParameter("fName"));
+		traveller.setlName(request.getParameter("lName"));
+		traveller.setNationality(request.getParameter("idType"));
+		traveller.setPassNum(request.getParameter("idNum"));
+
+		List<Traveller> passengerInfo=null;
+		if( session.getAttribute("passengerList")==null ){
+		passengerInfo = new ArrayList<Traveller> ();
+		}
+		else
+		{
+			if( ((List<Traveller>)session.getAttribute("passengerList")).size()>0){
+			passengerInfo   =(List<Traveller>)session.getAttribute("passengerList");
+			}
+			else{
+				passengerInfo = new ArrayList<Traveller> ();
+			}
+		}
+		
+		passengerInfo.add(traveller);
+		Traveller[] temp=new Traveller[passengerInfo.size()]
+		for(int i=0;i<passengerInfo.size();i++)
+		{
+			
+		}
+		reservation.setPassenger();
+		session.setAttribute("fare", (fare*passengerInfo.size())+"");
+		session.setAttribute("passengerList", passengerInfo);
+		session.setAttribute("destination", "/TwitterGUI/PassengerInfo.jsp");
+		reservation.setFare((fare*passengerInfo.size()));
+		session.setAttribute("myReservation", reservation);
+		response.sendRedirect("TwitterGUI/Dashboard.jsp");
+	}
+
+}

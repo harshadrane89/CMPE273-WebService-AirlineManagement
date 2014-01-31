@@ -1,0 +1,784 @@
+/**
+ * 
+ */
+package com.airlinemgmt.test;
+
+import static org.junit.Assert.assertEquals;
+
+import java.text.ParseException;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.beans.FlightDetails;
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Person;
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.beans.Traveller;
+import com.airlinemgmt.service.AirlineMgmtService;
+
+public class AirlineMgmtServiceTest {
+
+	private AirlineMgmtService airlineMgmtService;
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		airlineMgmtService = new AirlineMgmtService();
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#signIn(java.lang.String, java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testSignIn() {
+
+		Person personObj = null;
+
+		String uName = "deven@gmail.com";
+		String passwd = "123";
+		String Name = "John";
+
+		personObj = airlineMgmtService.signIn(uName, passwd);
+
+		assertEquals(Name, personObj.getfName());
+
+	}
+
+	@Test
+	public void testGetEmployeeDetailsById() {
+
+		AirlineEmployee emp = null;
+		String name = "John";
+		emp = airlineMgmtService.getEmployeeDetailsById("1");
+		assertEquals(name, emp.getfName());
+	}
+
+	@Test
+	public void testGetTravellerDetails() {
+		Traveller travellerObj = null;
+		String name = "John";
+
+		travellerObj = airlineMgmtService.getTravellerDetails("1003");
+		assertEquals(name, travellerObj.getfName());
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#addUpdateEmployee(com.airlinemgmt.beans.AirlineEmployee, java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testAddUpdateEmployee() {
+		AirlineEmployee emp = null;
+		emp = new AirlineEmployee();
+		emp.setEmpId("100000");
+		emp.setPersonId(10010);
+		emp.setSSN("2");
+		emp.setfName("John");
+		emp.setlName("Deo");
+		emp.setAddress("San Fernando");
+		emp.setCity("San Jose");
+		emp.setState("CA");
+		emp.setZipCode("95113");
+		emp.setDob("09-12-1987");
+		emp.setIsActive(1);
+		emp.setRoleId("1");
+		emp.setUserName("john@gmail.com");
+		emp.setPassword("12345678");
+		emp.setContactNo("4084089699");
+		emp.setWorkDesc("Foreman");
+		emp.setHireDate("05-09-2013");
+		emp.setPosition("safety");
+
+		String result = airlineMgmtService.addUpdateEmployee(emp, "insert");
+		assertEquals(result, "Incorrect SSN");
+
+	}
+
+	@Test
+	public void testAddUpdateEmployee_update() {
+		AirlineEmployee emp = null;
+		emp = new AirlineEmployee();
+		emp.setEmpId("2010");
+		emp.setPersonId(2010);
+		emp.setSSN("567-56-567");
+		emp.setfName("Chris");
+		emp.setlName("Deo");
+		emp.setAddress("Colonnade");
+		emp.setCity("San Jose");
+		emp.setState("CA");
+		emp.setZipCode("95113");
+		emp.setDob("09-12-1987");
+		// emp.setIsActive(1);
+		// emp.setRoleId("1");
+		emp.setUserName("john@gmail.com");
+		emp.setPassword("12345678");
+		emp.setContactNo("408408999");
+		emp.setWorkDesc("Foreman");
+		emp.setHireDate("05-09-2013");
+		emp.setPosition("safety");
+
+		String result = airlineMgmtService.addUpdateEmployee(emp, "update");
+		assertEquals(result, "Incorrect SSN");
+
+	}
+
+	@Test
+	public void testAddUpdateEmployee_delete() {
+		AirlineEmployee emp = null;
+		emp = new AirlineEmployee();
+		emp.setEmpId("2010");
+
+		String result = airlineMgmtService.addUpdateEmployee(emp, "delete");
+		assertEquals(result, "Incorrect First Name");
+
+	}
+
+	@Test
+	public void testAddUpdateEmployee_deleteAlready() {
+		AirlineEmployee emp = null;
+		emp = new AirlineEmployee();
+		emp.setEmpId("2010");
+
+		String result = airlineMgmtService.addUpdateEmployee(emp, "delete");
+		assertEquals(result, "Incorrect First Name");
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getEmployeeDetails(com.airlinemgmt.beans.AirlineEmployee)}
+	 * .
+	 */
+	@Test
+	public void testGetEmployeeDetails() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setfName("John");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 996);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByLname() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setlName("Deo");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 20);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByAddress() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setAddress("San Fernando Singham");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 0);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByCity() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setCity("San Jose");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 10);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByState() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setState("CA");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 10);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByZipCode() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setZipCode("95113");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 0);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_BySSN() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setSSN("567-56-567");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 0);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByDOB() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setfName("");
+		emp.setlName("");
+		emp.setDob("12-02-2012");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 0);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByHireDate() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setHireDate("09-12-1987");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 6);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByWorkDesc() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setWorkDesc("Foreman");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 6);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByContactNO() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setContactNo("408-408-9999");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray, null);
+	}
+
+	@Test
+	public void testGetEmployeeDetails_ByWorkPosition() {
+		AirlineEmployee[] empArray = null;
+		AirlineEmployee emp;
+		emp = new AirlineEmployee();
+		emp.setPosition("safety");
+
+		empArray = airlineMgmtService.getEmployeeDetails(emp);
+		assertEquals(empArray.length, 996);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#addUpdateCustomer(com.airlinemgmt.beans.Traveller, java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testAddUpdateCustomer() {
+		Traveller travellerObj = null;
+		travellerObj = new Traveller();
+		// travellerObj.setPersonId(2011);
+		// travellerObj.setSSN("568-56-567");
+		travellerObj.setfName("Monty");
+		travellerObj.setlName("Gash");
+		travellerObj.setAddress("San Fernando");
+		travellerObj.setCity("San Jose");
+		travellerObj.setState("CA");
+		travellerObj.setZipCode("95113");
+		travellerObj.setDob("09-12-1987");
+		// travellerObj.setIsActive(1);
+		// travellerObj.setRoleId("1");
+		travellerObj.setUserName("john@gmail.com");
+		travellerObj.setPassword("12345678");
+		travellerObj.setContactNo("4084089989");
+		travellerObj.setNationality("Indian");
+		travellerObj.setPassNum("J5678901");
+		travellerObj.setCustId("2011");
+		travellerObj.setCreditCardNum("1234123412341234");
+
+		String result = airlineMgmtService.addUpdateCustomer(travellerObj,
+				"insert");
+		assertEquals(result, "The provided username already exists");
+
+	}
+
+	@Test
+	public void testAddUpdateCustomer_update() {
+		Traveller travellerObj = null;
+		travellerObj = new Traveller();
+		travellerObj.setPersonId(111110);
+		// travellerObj.setSSN("568-56-567");
+		travellerObj.setfName("Johnfsf");
+		travellerObj.setlName("Doesd");
+		travellerObj.setAddress("75, North 1st Street");
+		travellerObj.setCity("San Jose");
+		travellerObj.setState("CA");
+		travellerObj.setZipCode("95115");
+		travellerObj.setDob("11-22-1999");
+		travellerObj.setIsActive(1);
+		travellerObj.setRoleId("0");
+		travellerObj.setUserName("dan@gmail.com");
+		travellerObj.setPassword("123");
+		travellerObj.setContactNo("9525673267");
+		travellerObj.setNationality("Indian");
+		travellerObj.setPassNum("008659534");
+		travellerObj.setCustId("118771");
+		travellerObj.setCreditCardNum("1233123412341234");
+
+		String result = airlineMgmtService.addUpdateCustomer(travellerObj,
+				"update");
+		assertEquals(result, "true");
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getCustomerDetails(com.airlinemgmt.beans.Traveller)}
+	 * .
+	 */
+	@Test
+	public void testGetCustomerDetails() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setfName("John Deven");
+
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 0);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByLname() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setlName("Will");
+
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 8);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByAddress() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setAddress("Santa Clara");
+
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 5);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByCity() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setCity("Los Angeles");
+
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 10);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByZipCode() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setZipCode("45151");
+
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 8);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByState() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setState("AAAKZ");
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 0);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByNationality() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setNationality("Indian");
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 5547);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByPassNum() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setPassNum("G167587");
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 0);
+
+	}
+
+	@Test
+	public void testGetCustomerDetails_ByContactNo() {
+
+		Traveller[] customerList = null;
+		Traveller traveller = new Traveller();
+		traveller.setContactNo("951-202-6765");
+		customerList = airlineMgmtService.getCustomerDetails(traveller);
+		assertEquals(customerList.length, 1);
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#searchJourney(com.airlinemgmt.beans.Journey)}
+	 * .
+	 */
+	@Test
+	public void testSearchJourney() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setAirline("Malay");
+		j1.setBoardingPoint("Singapore");
+		j1.setDestinationPoint("Seattle");
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j.length, 4);
+	}
+
+	@Test
+	public void testSearchJourney_byNoOfSeat() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setAirline("Malay");
+		j1.setNumberOfSeats(10);
+		j1.setBoardingPoint("Singapore");
+		j1.setDestinationPoint("Seattle");
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j, null);
+	}
+
+	@Test
+	public void testSearchJourney_byflightNum() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setFlightNum("Deven");
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j.length, 1);
+	}
+
+	@Test
+	public void testSearchJourney_byMinfare() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setMinFare("500");
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j.length, 0);
+	}
+
+	@Test
+	public void testSearchJourney_byMaxfare() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setMaxFare("500");
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j.length, 0);
+	}
+
+	@Test
+	public void testSearchJourney_byfare() {
+		Journey[] j = null;
+		Journey j1 = new Journey();
+		j1.setMaxFare("800");
+		j1.setMinFare("500");
+
+		j = airlineMgmtService.searchJourney(j1);
+
+		assertEquals(j.length, 3);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#deleteJourney(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testDeleteJourney() {
+
+		String id = "1";
+		boolean j = airlineMgmtService.deleteJourney(id);
+
+		assertEquals(j, false);
+
+	}
+
+	@Test
+	public void testAlreadyDeletedJourney() {
+
+		String id = "1";
+		boolean j = airlineMgmtService.deleteJourney(id);
+
+		assertEquals(j, false);
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#updateJourneyDetails(com.airlinemgmt.beans.Journey[])}
+	 * .
+	 */
+	@Test
+	public void testUpdateJourneyDetails() {
+		// fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#createReservation(com.airlinemgmt.beans.Reservation)}
+	 * .
+	 */
+	@Test
+	public void testCreateReservation() {
+		Reservation reservation = new Reservation();
+		reservation.setCustomerId("1002");
+		reservation.setCreditCardNumber("1234123412341234");
+		reservation.setCardCode("4313");
+		reservation.setReservationDate("2013-12-25");
+		reservation.setFare(500);
+
+		boolean r = airlineMgmtService.createReservation(reservation);
+		assertEquals(r, true);
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#deleteReservation(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testDeleteReservation() {
+		String id = "1";
+		boolean r = airlineMgmtService.deleteReservation(id);
+
+		assertEquals(r, false);
+	}
+
+	@Test
+	public void testAlreadyDeletedReservation() {
+		String id = "1";
+		boolean r = airlineMgmtService.deleteReservation(id);
+
+		assertEquals(r, false);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getReservation(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testGetReservation() {
+		String id = "1002";
+		Reservation[] reservation;
+		reservation = airlineMgmtService.getReservation(id);
+
+		assertEquals(reservation.length, 0);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getReservation(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testGetReservationAll() {
+		String id = "";
+		Reservation[] reservation;
+		reservation = airlineMgmtService.getReservation(id);
+
+		assertEquals(reservation.length, 12);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#addUpdateFlight(com.airlinemgmt.beans.FlightDetails, java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testAddUpdateFlight() throws ParseException {
+
+		FlightDetails flight = new FlightDetails();
+		flight.setAirlineName("United Sate Airline");
+		flight.setFlightNum("G6098");
+		flight.setSrc("San jose");
+		flight.setDest("Maimi");
+		flight.setNumOfSeats(50);
+		flight.setFlightDate("2014-01-25");
+
+		Journey journey = new Journey();
+		journey.setAirline("United Sate Airline");
+		journey.setFlightNum("G6098");
+		journey.setBoardingPoint("San jose");
+		journey.setDestinationPoint("Maimi");
+		journey.setNumberOfSeats(80);
+		journey.setArrivalDate("12-01-2013");
+		journey.setDepartureDate("12-02-2013");
+
+		Journey[] jArr = new Journey[1];
+		jArr[0] = journey;
+		flight.setJourneyInfo(jArr);
+
+		String result = airlineMgmtService.addUpdateFlight(flight, "insert");
+		assertEquals(result, "true");
+
+	}
+
+	@Test
+	public void testAddUpdateFlight_update() throws ParseException {
+
+		FlightDetails flight = new FlightDetails();
+		flight.setAirlineName("United Sate Airline");
+		flight.setFlightNum("G6098");
+		flight.setSrc("San jose");
+		flight.setDest("Maimi");
+		flight.setNumOfSeats(80);
+		flight.setFlightDate("2014-01-25");
+
+		Journey journey = new Journey();
+		journey.setAirline("United Sate Airline");
+		journey.setFlightNum("G6098");
+		journey.setBoardingPoint("San jose");
+		journey.setDestinationPoint("Maimi");
+		journey.setNumberOfSeats(80);
+		journey.setArrivalDate("12-01-2013");
+		journey.setDepartureDate("12-02-2013");
+
+		Journey[] jArr = new Journey[1];
+		jArr[0] = journey;
+		flight.setJourneyInfo(jArr);
+
+		String result = airlineMgmtService.addUpdateFlight(flight, "update");
+		assertEquals(result, "");
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getAllFlights()}.
+	 */
+	@Test
+	public void testGetAllFlights() {
+
+		FlightDetails flightDetails[] = null;
+		flightDetails = airlineMgmtService.getAllFlights();
+
+		assertEquals(flightDetails, null);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#getFlightDetails(com.airlinemgmt.beans.FlightDetails)}
+	 * .
+	 */
+	@Test
+	public void testGetFlightDetails() {
+		FlightDetails flight = new FlightDetails();
+		flight.setAirlineName("XYZ");
+		flight.setFlightNum("Deven");
+		flight.setSrc("XYZ");
+		flight.setDest("pkj");
+		flight.setNumOfSeats(10);
+		flight.setFlightDate("2013-12-25");
+
+		FlightDetails flightDetails[] = null;
+		flightDetails = airlineMgmtService.getFlightDetails(flight);
+
+		assertEquals(flightDetails.length, 0);
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.airlinemgmt.service.AirlineMgmtService#deleteAccount(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public void testDeleteAccount() {
+
+		String result = airlineMgmtService.deleteAccount("123@gmail.com");
+
+		assertEquals(result, null);
+
+	}
+
+	@Test
+	public void testDeleteAlreadyDeletedAccount() {
+
+		String result = airlineMgmtService.deleteAccount("123@gmail.com");
+
+		assertEquals(result, "Account deactivated");
+
+	}
+
+}

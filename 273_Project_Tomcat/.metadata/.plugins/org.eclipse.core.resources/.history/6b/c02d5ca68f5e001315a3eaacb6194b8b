@@ -1,0 +1,66 @@
+package com.airlinemgmt.container;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.airlinemgmt.beans.Traveller;
+
+/**
+ * Servlet implementation class CustomerListServlet
+ */
+@WebServlet("/CustomerListServlet")
+public class CustomerListServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public CustomerListServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session=request.getSession();
+		Traveller[] travellerObj=(Traveller[])session.getAttribute("tList");
+		Traveller traveller=null;
+		int index=0;
+		for(int i=0;i<travellerObj.length;i++)
+		{
+			if(session.getAttribute(i+"")!=null)
+			{
+				index=Integer.parseInt((String)session.getAttribute(i+""));
+				break;
+			}
+		}
+		traveller=travellerObj[index];
+		session.setAttribute("tObj",traveller);
+		session.setAttribute("destination", "/TwitterGUI/ViewCustomer.jsp");
+		response.sendRedirect("/TwitterGUI/Dashboard.jsp");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		Traveller[] travellerObj=null;
+		S
+		HttpSession session=request.getSession();
+		session.setAttribute("tList", travellerObj);
+		session.setAttribute("destination","/TwitterGUI/ListCustomer.jsp" );
+		response.sendRedirect("/TwitterGUI/Dashboard.jsp");
+		
+	}
+
+}

@@ -1,0 +1,186 @@
+package com.airlinemgmt.service;
+
+public class AirlineMgmtServiceProxy implements com.airlinemgmt.service.AirlineMgmtService {
+  private String _endpoint = null;
+  private com.airlinemgmt.service.AirlineMgmtService airlineMgmtService = null;
+  
+  public AirlineMgmtServiceProxy() {
+    _initAirlineMgmtServiceProxy();
+  }
+  
+  public AirlineMgmtServiceProxy(String endpoint) {
+    _endpoint = endpoint;
+    _initAirlineMgmtServiceProxy();
+  }
+  
+  private void _initAirlineMgmtServiceProxy() {
+    try {
+      airlineMgmtService = (new com.airlinemgmt.service.AirlineMgmtServiceServiceLocator()).getAirlineMgmtService();
+      if (airlineMgmtService != null) {
+        if (_endpoint != null)
+          ((javax.xml.rpc.Stub)airlineMgmtService)._setProperty("javax.xml.rpc.service.endpoint.address", _endpoint);
+        else
+          _endpoint = (String)((javax.xml.rpc.Stub)airlineMgmtService)._getProperty("javax.xml.rpc.service.endpoint.address");
+      }
+      
+    }
+    catch (javax.xml.rpc.ServiceException serviceException) {}
+  }
+  
+  public String getEndpoint() {
+    return _endpoint;
+  }
+  
+  public void setEndpoint(String endpoint) {
+    _endpoint = endpoint;
+    if (airlineMgmtService != null)
+      ((javax.xml.rpc.Stub)airlineMgmtService)._setProperty("javax.xml.rpc.service.endpoint.address", _endpoint);
+    
+  }
+  
+  public com.airlinemgmt.service.AirlineMgmtService getAirlineMgmtService() {
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService;
+  }
+  
+  public int makePayment(com.airlinemgmt.beans.Payment payment) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.makePayment(payment);
+  }
+  
+  public int issueTicket(int journeyId) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.issueTicket(journeyId);
+  }
+  
+  public boolean addUpdateEmployee(com.airlinemgmt.beans.AirlineEmployee employee, java.lang.String operation) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.addUpdateEmployee(employee, operation);
+  }
+  
+  public com.airlinemgmt.beans.AirlineEmployee[] getAllEmployees() throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getAllEmployees();
+  }
+  
+  public boolean deleteEmployee(java.lang.String empId) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.deleteEmployee(empId);
+  }
+  
+  public java.lang.String customerSignIn(com.airlinemgmt.beans.Traveller traveller) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.customerSignIn(traveller);
+  }
+  
+  public boolean deleteCustomer(int customerId) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.deleteCustomer(customerId);
+  }
+  
+  public java.lang.String setSessionInfo(java.lang.String username, java.lang.String loginTime) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.setSessionInfo(username, loginTime);
+  }
+  
+  public java.lang.String getSessionInfo(java.lang.String username) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getSessionInfo(username);
+  }
+  
+  public com.airlinemgmt.beans.Traveller[] getAllCustomers() throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getAllCustomers();
+  }
+  
+  public boolean addUpdateCustomer(com.airlinemgmt.beans.Traveller traveller, java.lang.String operation) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.addUpdateCustomer(traveller, operation);
+  }
+  
+  public int addUpdateJourneyDetails(com.airlinemgmt.beans.Journey journey, java.lang.String operation) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.addUpdateJourneyDetails(journey, operation);
+  }
+  
+  public boolean createNewReservation(int ticketID) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.createNewReservation(ticketID);
+  }
+  
+  public boolean cancelledReservation(int ticketID) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.cancelledReservation(ticketID);
+  }
+  
+  public com.airlinemgmt.beans.Journey getJourneyDetails(int ticketID) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getJourneyDetails(ticketID);
+  }
+  
+  public com.airlinemgmt.beans.AirlineEmployee[] getEmployeeDetails(com.airlinemgmt.beans.AirlineEmployee emp) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getEmployeeDetails(emp);
+  }
+  
+  public com.airlinemgmt.beans.Traveller[] getListOfFlightCustomers(java.lang.String flightNum) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getListOfFlightCustomers(flightNum);
+  }
+  
+  public com.airlinemgmt.beans.FlightDetails[] getAllFlights() throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getAllFlights();
+  }
+  
+  public boolean addUpdateFlight(com.airlinemgmt.beans.FlightDetails flight, java.lang.String operation) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.addUpdateFlight(flight, operation);
+  }
+  
+  public com.airlinemgmt.beans.Traveller getTravellerDetails(int journeyID) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getTravellerDetails(journeyID);
+  }
+  
+  public com.airlinemgmt.beans.FlightDetails[] getFlightDetails(java.lang.String airlineName, java.lang.String flightNum, java.lang.String src, java.lang.String dest, int noOfSeats, java.lang.String flightDate) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getFlightDetails(airlineName, flightNum, src, dest, noOfSeats, flightDate);
+  }
+  
+  public java.lang.String deleteAccount(java.lang.String username) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.deleteAccount(username);
+  }
+  
+  public com.airlinemgmt.beans.Traveller[] getCustomerDetails(com.airlinemgmt.beans.Traveller input) throws java.rmi.RemoteException{
+    if (airlineMgmtService == null)
+      _initAirlineMgmtServiceProxy();
+    return airlineMgmtService.getCustomerDetails(input);
+  }
+  
+  
+}

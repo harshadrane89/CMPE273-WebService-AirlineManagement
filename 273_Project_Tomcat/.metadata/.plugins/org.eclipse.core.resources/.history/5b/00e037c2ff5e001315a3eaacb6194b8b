@@ -1,0 +1,76 @@
+<%@page import="com.airlinemgmt.beans.Journey"%>
+<%@page import="com.airlinemgmt.beans.FlightDetails"%>
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title></title>
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+	<form action="../FlightListProcessor" method="post" class="well">
+		<%
+			Journey journey = new Journey();
+			if (session.getAttribute("searchJourney") != null) {
+				journey = (Journey) session
+						.getAttribute("searchJourney");
+			}
+		%>
+		<center>
+			<h3>Search Flight</h3>
+
+			<table cellpadding="10px" cellspacing="10px" class="table-striped">
+				<tr>
+					<td>Source & Destination</td>
+					<td><input type="text" placeholder="Source" name="src"
+						value="<%=journey.getBoardingPoint() != null ? journey.getBoardingPoint()
+					: ""%>"
+						class="form-control"></td>
+					<td><input type="text" placeholder="Destination" name="dest"
+						value="<%=journey.getDestinationPoint() != null ? journey.getDest()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Airline Name</td>
+					<td><input type="text" placeholder="Airline Name"
+						name="airName"
+						value="<%=journey.getAirlineName() != null ? journey
+					.getAirlineName() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Flight Number</td>
+					<td><input type="text" placeholder="Flight Number" name="fNum"
+						value="<%=journey.getFlightNum() != null ? journey
+					.getFlightNum() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Fare</td>
+					<td><input type="text" placeholder="Minimum Fair"
+						name="minFair" class="form-control" value="<%=journey.get != null ? journey
+					.getFlightDate() : ""%>"></td>
+					<td><input type="text" placeholder="Maximum Fair"
+						name="maxFair" class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Flight Date</td>
+					<td><input type="text" placeholder="Flight Date" name="fDate"
+						value="<%=journey.getFlightDate() != null ? journey
+					.getFlightDate() : ""%>"
+						class="form-control"></td>
+				</tr>
+			</table>
+			<br> <br> <input type="submit" class="btn btn-success"
+				value="Search >>">
+		</center>
+		<br> <br>
+	</form>
+</body>
+
+</html>

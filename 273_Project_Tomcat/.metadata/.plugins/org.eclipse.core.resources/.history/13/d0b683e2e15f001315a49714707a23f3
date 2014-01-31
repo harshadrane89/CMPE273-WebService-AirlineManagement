@@ -1,0 +1,18 @@
+package com.airlinemgmt.server;
+
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+public  class MyClass {
+	
+	public MyClass() {
+		// TODO Auto-generated constructor stub
+		AirlineMgmtServiceProxy proxy;
+		proxy = new AirlineMgmtServiceProxy();
+		System.out.println("***proxy initialized******" + proxy);
+		proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+		System.out.println("***proxy******" + proxy.hashCode());
+	}
+	
+	
+
+}

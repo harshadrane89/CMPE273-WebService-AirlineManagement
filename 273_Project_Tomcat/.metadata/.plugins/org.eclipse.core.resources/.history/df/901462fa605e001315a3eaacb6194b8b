@@ -1,0 +1,143 @@
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@page import="com.airlinemgmt.beans.AirlineEmployee"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title></title>
+<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+	<form class="well">
+		<%
+			Traveller traveller = new Traveller();
+			if (session.getAttribute("tObj") != null) {
+				traveller = (Traveller) session.getAttribute("tObj");
+			}
+		%>
+		<center>
+			<h3>Personal Details</h3>
+
+			<table cellpadding="10px" cellspacing="10px" class="table-striped">
+				<tr>
+					<td>SSN</td>
+					<td><input type="text" placeholder="Social Security Info"
+						name="ssn"
+						value="<%=traveller.getCustId() != null ? traveller.getCustId(): ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td><input type="text" placeholder="First Name" name="fName"
+						value="<%=traveller.getfName() != null ? traveller.getfName() : ""%>"
+						class="form-control"></td>
+					<td><input type="text" placeholder="Last Name" name="lName"
+						value="<%=traveller.getlName() != null ? traveller.getlName() : ""%>"
+						class="form-control"></td>
+				</tr>
+
+				<tr>
+					<td>Date of Birth</td>
+					<td><input type="text" placeholder="Date of Birth" name="dob"
+						value="<%=traveller.getDob() != null ? traveller.getDob() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Contact Information</td>
+					<td><input type="text" placeholder="Contact Information"
+						name="cInfo"
+						value="<%=traveller.getContactNo() != null ? traveller
+					.getContactNo() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Address</td>
+					<td><input type="text" placeholder="Address" name="address"
+						value="<%=traveller.getAddress() != null ? traveller.getAddress()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>City</td>
+					<td><input type="text" placeholder="City" name="city"
+						value="<%=traveller.getCity() != null ? traveller.getCity() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>State</td>
+					<td><input type="text" placeholder="State" name="state"
+						value="<%=traveller.getState() != null ? traveller.getState() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Zip Code</td>
+					<td><input type="text" placeholder="Zip Code" name="zip"
+						value="<%=traveller.getZipCode() != null ? traveller.getZipCode()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+			</table>
+
+		</center>
+		<br> <br>
+
+		<center>
+			<h3>Travel Information</h3>
+			<table cellpadding="10px" cellspacing="10px" class="table-striped">
+				<tr>
+					<td>Nationality</td>
+					<td>
+					<td><input type="text" placeholder="Nationality"
+						name="uNationality"
+						value="<%=traveller.getNationality() != null ? traveller
+					.getNationality() : ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Passport Number</td>
+					<td>
+					<td><input type="text" placeholder="Passport Number"
+						value="<%=traveller.getPassNum() != null ? traveller.getPassNum()
+					: ""%>"
+						name="uPNumber" class="form-control"></td>
+				</tr>
+
+			</table>
+		</center>
+		<br> <br>
+
+		<center>
+			<h3>Account Information</h3>
+			<table cellpadding="10px" cellspacing="10px" class="table-striped"
+				class="form-control">
+				<tr>
+					<td>Username</td>
+					<td><input type="text" placeholder="Username" name="uName"
+						value="<%=traveller.getUserName() != null ? traveller.getUserName()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" placeholder="Username"
+						name="uPasswd"
+						value="<%=traveller.getPassword() != null ? traveller.getPassword()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+				<tr>
+					<td>Credit Card Number</td>
+					<td><input type="password" placeholder="CCNumber"
+						name="uCC"
+						value="<%=traveller.getCreditCardNum() != null ? traveller.getCreditCardNum()
+					: ""%>"
+						class="form-control"></td>
+				</tr>
+			</table>
+		</center>
+	</form>
+</body>
+
+</html>

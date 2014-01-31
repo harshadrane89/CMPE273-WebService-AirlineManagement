@@ -1,0 +1,80 @@
+package com.airlinemgmt.beans;
+
+public class Journey {
+
+	private int journeyId;
+	private String custId;
+	private String flightNum;
+	private String destinationPoint;
+	private String boardingPoint;
+	private String arrivalDate;
+	private String departureDate;
+	private float fare;
+
+	public int getJourneyId() {
+		return journeyId;
+	}
+
+	public void setJourneyId(int journeyId) {
+		this.journeyId = journeyId;
+	}
+
+	public String getCustId() {
+		return custId;
+	}
+
+	public void setCustId(String custId) {
+		this.custId = custId;
+	}
+
+	public String getFlightNum() {
+		return flightNum;
+	}
+
+	public void setFlightNum(String flightNum) {
+		this.flightNum = flightNum;
+	}
+
+	public String getDestinationPoint() {
+		return destinationPoint;
+	}
+
+	public void setDestinationPoint(String destinationPoint) {
+		this.destinationPoint = destinationPoint;
+	}
+
+	public String getBoardingPoint() {
+		return boardingPoint;
+	}
+
+	public void setBoardingPoint(String boardingPoint) {
+		this.boardingPoint = boardingPoint;
+	}
+
+
+	public String getArrivalDate() {
+		return arrivalDate;
+	}
+
+	public void setArrivalDate(String arrivalDate) {
+		this.arrivalDate = arrivalDate;
+	}
+
+	public String getDepartureDate() {
+		return departureDate;
+	}
+
+	public void setDepartureDate(String departureDate) {
+		this.departureDate = departureDate;
+	}
+
+
+	public float getFare() {
+		return fare;
+	}
+
+	public void setFare(float fare) {
+		this.fare = fare;
+	}
+
+}

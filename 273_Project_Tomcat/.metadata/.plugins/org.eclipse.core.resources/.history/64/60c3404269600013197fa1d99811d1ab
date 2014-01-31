@@ -1,0 +1,116 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<title>Employee Details</title>
+<style>
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Employee</title>
+</head>
+<body>
+ <form method ="post" name = "myForm" action="CustomerServlet">
+ <div id="canvas">
+			<div id="header">
+				<div class="oferte_content">
+					<h1>Airline Management System</h1>
+				</div>
+				<!-- end of oferte_content-->
+			</div>
+			<div id="menu_tab" style="padding-left: 137px">
+					<div class="left_menu_corner"></div>
+					<ul class="menu">
+						<li><a href="" class="nav1"> User Details</a></li>
+						<li class="divider"></li>
+
+					</ul>
+					<div class="right_menu_corner"></div>
+				</div>
+				</div> <!--  div canvas -->
+				<fieldset style="width:600">
+	<table>
+		<tr>
+			<td>First Name</td>
+			<td><input type = "text" name = "fName"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Last Name</td>
+			<td><input type = "text" name = "lName"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>SSN</td>
+			<td><input type="text" name="custId"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>User Name</td>
+			<td><input type="text" name="username"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Password</td>
+			<td><input type="password" name="pwd"/></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>Address</td>
+			<td><input type="text" name="address"/></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>City</td>
+			<td><input type="text" name="city"/></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>State</td>
+			<td><input type="text" name="state"></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>Zip Code</td>
+			<td><input type="text" name="zipCode"/></td>
+			<td></td>
+		</tr>	
+		<tr>
+			<td>DOB</td>
+			<td><input type="text" name="dob"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Passport Number</td>
+			<td><input type="text" name="passNum"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Nationality</td>
+			<td><input type="text" name="nationality"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Credit Card Number</td>
+			<td><input type="text" name="cerditCardnum"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="Submit"/></td>
+			<td></td>
+		</tr>
+	</table>
+	</fieldset>
+  </form>
+</body>
+</html>

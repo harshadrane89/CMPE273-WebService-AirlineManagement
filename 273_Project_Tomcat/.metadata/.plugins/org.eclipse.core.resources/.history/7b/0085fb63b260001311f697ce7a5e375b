@@ -1,0 +1,70 @@
+package com.airlinemgmt.DB;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import javax.sql.DataSource;
+import javax.naming.InitialContext;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
+public class DBManager {
+	/*final static String url = "jdbc:mysql://localhost:3306/";
+	final static String dbName = "AirlineManagementSystem";
+	final static String driver = "com.mysql.jdbc.Driver";
+	final static String userName = "root";
+	final static String password = "";*/
+	public static DataSource dataSource;
+	public static Connection conn;
+    
+	
+	/*public DBManager() {
+		//InitialContext initContext;
+        try {
+        	Context initContext  = new InitialContext();
+             Context envContext  = (Context)initContext.lookup("java:/comp/env");
+             dataSource = (DataSource)envContext.lookup("jdbc/airline_management");
+
+        } catch (NamingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        connection = dataSource.getConnection();
+	}*/
+
+	public static Connection getConnection() throws Exception {
+		/*Class.forName(driver).newInstance();
+		Connection conn = DriverManager.getConnection(url + dbName, userName,
+				password);
+		System.out.println("Connected to Airline ManagementSystem");
+		return conn;*/
+		
+		//InitialContext initContext;
+        try {
+        	
+        	Context initContext  = new InitialContext();
+        	Context envContext  = (Context)initContext.lookup("java:/comp/env");
+        	dataSource = (DataSource)envContext.lookup("jdbc/AirlineManagementSystem");
+
+        } catch (NamingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        conn = dataSource.getConnection();
+        System.out.println(conn.isClosed());
+        //System.out.println("Connection:" +conn);
+        return conn;
+	}
+	
+	public static void main(String[] args) {
+		
+		try {
+			DBManager.getConnection();	
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+	}
+}

@@ -1,0 +1,1332 @@
+package com.airlinemgmt.DAO;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.airlinemgmt.DB.DBManager;
+import com.airlinemgmt.SQLqueries.SQLquery;
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.beans.Ticket;
+import com.airlinemgmt.beans.Traveller;
+import com.airlinemgmt.cache.CacheObject;
+import com.airlinemgmt.validations.Validations;
+
+public class CustomerDAO {
+
+	public Traveller getTravellerDetails(String personID) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		Traveller traveller = null;
+		try {
+			String sql = "SELECT * FROM PERSON P,CUSTOMER C WHERE P.PERSONID =(?) AND P.PERSONID=C.PERSONID";
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, personID);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				traveller = new Traveller();
+				traveller
+						.setPersonId(Integer.parseInt(rs.getString("PersonId")));
+				traveller.setContactNo(rs.getString("contactNo"));
+				traveller.setfName(rs.getString("FName"));
+				traveller.setlName(rs.getString("LName"));
+				traveller.setAddress(rs.getString("Address"));
+				traveller.setCity(rs.getString("City"));
+				traveller.setState(rs.getString("State"));
+				traveller.setZipCode(rs.getString("ZipCode"));
+				traveller.setDob(rs.getString("DOB"));
+				traveller.setIsActive((rs.getInt("IsActive")));
+				traveller.setRoleId(rs.getString("RoleId"));
+				traveller.setCustId(rs.getString("custId"));
+				traveller.setUserName(rs.getString("userName"));
+				traveller.setPassword(rs.getString("password"));
+				traveller.setPassNum(rs.getString("passNum"));
+				traveller.setNationality(rs.getString("nationality"));
+				traveller.setCreditCardNum(rs.getString("creditCardNum"));
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return traveller;
+
+	}
+
+	public boolean updateCustomer(Traveller traveller) {
+
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+
+			String sql = "UPDATE CUSTOMER SET nationality=?,passNum=?,creditCardNum=? where personId=?";
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+
+			ps.setString(1, traveller.getNationality());
+			ps.setString(2, traveller.getPassNum());
+			ps.setString(3, traveller.getCreditCardNum());
+			ps.setString(4, traveller.getPersonId() + "");
+			result = ps.execute();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+
+	}
+
+	public Traveller[] getCustomerDetails(Traveller traveller) {
+
+		Traveller[] result = null;
+		if (traveller == null) {
+			System.out.println("GOT FROM CACHE");
+			result = CacheObject.traveller;
+		} else {
+
+			Connection con = null;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+
+			try {
+
+				String sql = "SELECT * FROM PERSON p , CUSTOMER c WHERE p.PERSONID=c.PERSONID AND p.IsActive=1 ";
+
+				if (traveller != null) {
+					String addnl = "";
+					if (!traveller.getfName().equalsIgnoreCase("")) {
+						addnl += "AND p.FNAME LIKE '%" + traveller.getfName()
+								+ "%'";
+					}
+					if (!traveller.getlName().equalsIgnoreCase("")) {
+						addnl += "AND p.LNAME LIKE '%" + traveller.getlName()
+								+ "%'";
+					}
+					if (!traveller.getDob().equalsIgnoreCase("")) {
+						addnl += "AND p.DOB LIKE '%" + traveller.getDob()
+								+ "%'";
+					}
+					if (!traveller.getContactNo().equalsIgnoreCase("")) {
+						addnl += "AND p.CONTACTNO LIKE '%"
+								+ traveller.getContactNo() + "%'";
+					}
+					if (!traveller.getAddress().equalsIgnoreCase("")) {
+						addnl += "AND p.ADDRESS LIKE '%"
+								+ traveller.getAddress() + "%'";
+					}
+					if (!traveller.getCity().equalsIgnoreCase("")) {
+						addnl += "AND p.CITY LIKE '%" + traveller.getCity()
+								+ "%'";
+					}
+					if (!traveller.getState().equalsIgnoreCase("")) {
+						addnl += "AND p.STATE LIKE '%" + traveller.getState()
+								+ "%'";
+					}
+					if (!traveller.getZipCode().equalsIgnoreCase("")) {
+						addnl += "AND p.ZIPCODE LIKE '%"
+								+ traveller.getZipCode() + "%'";
+					}
+					if (!traveller.getNationality().equalsIgnoreCase("")) {
+						addnl += "AND c.NATIONALITY LIKE '%"
+								+ traveller.getNationality() + "%'";
+					}
+					if (!traveller.getPassNum().equalsIgnoreCase("")) {
+						addnl += "AND c.PASSNUM LIKE '%"
+								+ traveller.getPassNum() + "%'";
+					}
+					if (traveller.getUserName() != null
+							&& !traveller.getUserName().equalsIgnoreCase("")) {
+						addnl += "AND p.USERNAME LIKE '%"
+								+ traveller.getUserName() + "%'";
+					}
+					if (!traveller.getCreditCardNum().equalsIgnoreCase("")) {
+						addnl += "AND c.CREDITCARDNUM LIKE '%"
+								+ traveller.getCreditCardNum() + "%'";
+					}
+					sql += addnl;
+				}
+				con = DBManager.getConnection();
+				ps = con.prepareStatement(sql);
+				rs = ps.executeQuery();
+				List<Traveller> travellerInfo = new ArrayList<Traveller>();
+				System.out.println(sql);
+				while (rs.next()) {
+					traveller = new Traveller();
+
+					traveller.setPersonId(Integer.parseInt(rs
+							.getString("PersonId")));
+					traveller.setContactNo(rs.getString("contactNo"));
+					traveller.setfName(rs.getString("FName"));
+					traveller.setlName(rs.getString("LName"));
+					traveller.setAddress(rs.getString("Address"));
+					traveller.setCity(rs.getString("City"));
+					traveller.setState(rs.getString("State"));
+					traveller.setZipCode(rs.getString("ZipCode"));
+					traveller.setDob(rs.getString("DOB"));
+					traveller.setIsActive((rs.getInt("IsActive")));
+					traveller.setRoleId(rs.getString("RoleId"));
+					traveller.setCustId(rs.getString("custId"));
+					traveller.setUserName(rs.getString("userName"));
+					traveller.setPassword(rs.getString("password"));
+					traveller.setPassNum(rs.getString("passNum"));
+					traveller.setNationality(rs.getString("nationality"));
+					traveller.setCreditCardNum(rs.getString("creditCardNum"));
+					travellerInfo.add(traveller);
+
+				}
+
+				result = new Traveller[travellerInfo.size()];
+				int index = 0;
+				for (Traveller travel : travellerInfo) {
+					result[index] = travel;
+					index++;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (con != null) {
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (ps != null) {
+					try {
+						ps.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return result;
+
+	}
+
+	public boolean insertPersonDetails(Traveller traveller) {
+		try {
+			Connection con = null;
+			PreparedStatement prest = null;
+			boolean result = true;
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				String insertPersonQuery = SQLquery.insertPersonDetail;
+				PreparedStatement statement = con
+						.prepareStatement(insertPersonQuery);
+				statement.setString(1, traveller.getfName());
+				statement.setString(2, traveller.getlName());
+				statement.setString(3, traveller.getAddress());
+				statement.setString(4, traveller.getCity());
+				statement.setString(5, traveller.getState());
+				statement.setString(6, traveller.getZipCode());
+
+				SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+				java.util.Date date = sdf1.parse(traveller.getDob());
+				java.sql.Date sqlStartDate = new Date(date.getTime());
+				statement.setString(7, traveller.getDob());
+
+				statement.setString(8, "1"); // roleId0 for traveller, 1 for
+												// travellers
+				statement.setInt(9, 1); // is active
+				statement.setString(10, traveller.getContactNo());
+				statement.setString(11, traveller.getUserName());
+				statement.setString(12, traveller.getPassword());
+				statement.executeUpdate();
+
+				String insertTravellerQuery = SQLquery.insertCustomerDetails;
+				PreparedStatement statement1 = con
+						.prepareStatement(insertTravellerQuery);
+				// statement1.setString(1, traveller.getCustId());
+				statement1.setInt(1, getPersonId(con));
+				statement1.setString(2, traveller.getPassNum());
+				statement1.setString(3, traveller.getNationality());
+				statement1.setString(4, traveller.getCreditCardNum());
+				statement1.executeUpdate();
+
+				CacheObject.custList.add(traveller);
+				CacheObject.traveller = new Traveller[CacheObject.custList
+						.size()];
+				for (int i = 0; i < CacheObject.custList.size(); i++) {
+					Traveller customer = CacheObject.custList.get(i);
+					CacheObject.traveller[i] = customer;
+				}
+
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+	public String validateFields(Traveller traveller) {
+
+		String errorMessage = "true";
+		try {
+
+			Validations validations = new Validations();
+
+			if (!validations.verifyString(traveller.getfName()))
+				return "Incorrect First Name";
+
+			if (!validations.verifyString(traveller.getlName()))
+				return "Incorrect Last Name";
+
+			if (!validations.verifyDateOfBirth(traveller.getDob()))
+				return "Incorrect Date Of Birth";
+
+			if (!validations.verifyContactNo(traveller.getContactNo()))
+				return "Incorrect Contact Number";
+
+			if (!validations.verifyString(traveller.getAddress()))
+				return "Incorrect Address";
+
+			if (!validations.verifyString(traveller.getCity()))
+				return "Incorrect City";
+
+			if (!validations.verifyString(traveller.getState()))
+				return "Incorrect State";
+
+			if (!validations.verifyZipCode(traveller.getZipCode()))
+				return "Incorrect Zip Code";
+
+			if (!validations.verifyString(traveller.getNationality()))
+				return "Incorrect Nationality";
+
+			if (!validations.validatePassportNumber(traveller.getPassNum()))
+				return "Incorrect Passport Number";
+
+			if (!validations.validateUserName(traveller.getUserName()))
+				return "Incorrect Username";
+
+			if (!validations.validateEUserName(traveller.getUserName()))
+				return "Incorrect Username";
+
+			if (traveller.getPassword() == null
+					|| traveller.getPassword().trim().equalsIgnoreCase(""))
+				return "Incorrect Password";
+
+			if (!validations.verifyCreditCardNumber(traveller
+					.getCreditCardNum()))
+				return "Incorrect Credit Card Number";
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		}
+		return errorMessage;
+	}
+
+	public boolean validateEUserName(String UserName) {
+
+	}
+
+	public boolean updatePersonDetails(Traveller traveller) {
+		Connection con = null;
+		PreparedStatement prest = null;
+		// boolean result = true;
+		int rs;
+		try {
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.updatePersonDetails;
+				prest = con.prepareStatement(prepStatement);
+
+				prest.setString(1, traveller.getfName());
+				prest.setString(2, traveller.getlName());
+				prest.setString(3, traveller.getAddress());
+				prest.setString(4, traveller.getCity());
+				prest.setString(5, traveller.getState());
+				prest.setString(6, traveller.getZipCode());
+
+				SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+				java.util.Date date = sdf1.parse(traveller.getDob());
+				java.sql.Date sqlStartDate = new Date(date.getTime());
+				prest.setString(7, traveller.getDob());
+
+				// prest.setString(7, traveller.getDob());
+				prest.setString(8, traveller.getContactNo());
+				prest.setString(9, traveller.getUserName());
+				prest.setString(10, traveller.getPassword());
+				prest.setString(11, traveller.getPersonId() + "");
+
+				rs = prest.executeUpdate();
+				updateCustomer(traveller);
+				System.out.println("A user got added" + prest.toString());
+
+				CacheObject.custList.add(traveller);
+				CacheObject.traveller = new Traveller[CacheObject.custList
+						.size()];
+				for (int i = 0; i < CacheObject.custList.size(); i++) {
+					Traveller customer = CacheObject.custList.get(i);
+					CacheObject.traveller[i] = customer;
+				}
+
+				if (rs > 0)
+					return true;
+				else
+					return false;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			// result = false;
+			return false;
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+	public boolean insertCustomerDetails(Traveller traveller) {
+
+		Connection con = null;
+		PreparedStatement prest = null;
+		boolean result = true;
+		int personId = 0;
+		try {
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				personId = getPersonId(traveller.getfName(),
+						traveller.getfName(), traveller.getAddress());
+				String prepStatement = SQLquery.insertCustomerDetails;
+				prest = con.prepareStatement(prepStatement);
+				System.out.println("Hello ");
+				// INSERT into
+				// AirlineManagementSystem.customer(custId,personId,passNum,nationality,creditCardNum)
+				// VALUES(?,?,?,?,?)"
+
+				prest.setString(1, traveller.getCustId());
+				prest.setInt(2, personId);
+				prest.setString(3, traveller.getPassNum());
+				prest.setString(4, traveller.getNationality());
+				prest.setString(5, traveller.getCreditCardNum());
+				prest.executeUpdate();
+
+				System.out.println("A user got added");
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			// result = false;
+			return false;
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+	public int getPersonId(String fName, String lName, String address) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+
+		int personId = 0;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.getPersonID;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, fName);
+			prest.setString(2, lName);
+			prest.setString(3, address);
+			rs = prest.executeQuery();
+
+			while (rs.next()) {
+				personId = rs.getInt(1);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		System.out.println("personId: " + personId);
+		return personId;
+	}
+
+	public String customerSignIn(Traveller traveller) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+
+		String password = null;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.customerSignIn;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, traveller.getUserName());
+			rs = prest.executeQuery();
+
+			while (rs.next()) {
+				password = rs.getString(1);
+				traveller.setRoleId(rs.getString(2));
+				traveller.setIsActive(rs.getInt(3));
+			}
+			if (traveller.getIsActive() == 1) {
+				if (password.equalsIgnoreCase(traveller.getPassword())) {
+					return "Matches";
+				} else
+					return "Not Matches";
+			} else
+				return "Account Deactivated";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		// System.out.println("personId: " +personId);
+		return "NA";
+	}
+
+	public String setSessionInfo(String username, String loginTime) {
+		Connection con = null;
+		int rs = 0;
+		PreparedStatement prest = null;
+
+		String result = "failure";
+		try {
+
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.updateSessionInfo;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, loginTime);
+			prest.setString(2, username);
+			rs = prest.executeUpdate();
+			// String query =
+			// "Update UserSession set username ="+"'"+username+"', loginTime="+"'"+loginTime+"' where username='"+username+"'";
+			// rowcount = stmt.executeUpdate(query);
+			if (rs > 0) {
+				result = "Success";
+				System.out.println("Update Successful!!!");
+			} else {
+				prepStatement = SQLquery.insertIntoSessioninfo;
+				prest = con.prepareStatement(prepStatement);
+				prest.setString(1, username);
+				prest.setString(2, loginTime);
+
+				// query =
+				// "Insert into UserSession (username, loginTime) values ('"+username+"' , '"+loginTime+"')";
+			}
+			rs = prest.executeUpdate();
+			if (rs > 0) {
+				result = "Success";
+				System.out
+						.println("Insert in session info table Successful!!!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public String getSessionInfo(String userName) throws SQLException {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		// String result = null;
+		try {
+			con = DBManager.getConnection();
+			String prepStatement = SQLquery.getSessionInfo;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, userName);
+			// String query =
+			// "SELECT loginTime FROM UserSession WHERE username='"+userName+"'";
+			rs = prest.executeQuery();
+			if (rs.next()) {
+				String loginTime = rs.getString(1);
+				return loginTime;
+			} else
+				return "This is your first login!";
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return "This is your first login!";
+	}
+
+	public static Traveller[] getAllCustomers(boolean isDB) {
+		Traveller[] customerList = null;
+
+		if (!isDB) {
+			customerList = CacheObject.traveller;
+			System.out.println("*****Customers from Cache****** ");
+		} else {
+			Connection con = null;
+			ResultSet rs = null;
+			PreparedStatement prest = null;
+			int size;
+			try {
+
+				con = DBManager.getConnection();
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.getAllCustomers;
+				prest = con.prepareStatement(prepStatement);
+
+				rs = prest.executeQuery();
+				if (rs != null) {
+					rs.last();
+					size = rs.getRow();
+					if (size == 0) {
+						return null;
+					}
+					customerList = new Traveller[size];
+					int currRow = 0;
+					rs.beforeFirst();
+
+					while (rs.next()) {
+						System.out.println("Caching Customer");
+						// System.out.println("here");
+						Traveller traveller = new Traveller();
+						traveller.setPersonId(Integer.parseInt(rs
+								.getString("PersonId")));
+						traveller.setContactNo(rs.getString("contactNo"));
+						traveller.setfName(rs.getString("FName"));
+						traveller.setlName(rs.getString("LName"));
+						traveller.setAddress(rs.getString("Address"));
+						traveller.setCity(rs.getString("City"));
+						traveller.setState(rs.getString("State"));
+						traveller.setZipCode(rs.getString("ZipCode"));
+						traveller.setDob(rs.getString("DOB"));
+						traveller.setIsActive((rs.getInt("IsActive")));
+						traveller.setRoleId(rs.getString("RoleId"));
+						traveller.setCustId(rs.getString("custId"));
+						traveller.setUserName(rs.getString("userName"));
+						traveller.setPassword(rs.getString("password"));
+						traveller.setPassNum(rs.getString("passNum"));
+						traveller.setNationality(rs.getString("nationality"));
+						traveller.setCreditCardNum(rs
+								.getString("creditCardNum"));
+						System.out.println("there1");
+						customerList[currRow] = traveller;
+						currRow++;
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (prest != null)
+						prest.close();
+					if (con != null)
+						con.close(); // return to pool
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public Traveller[] searchByName(String fname) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Traveller[] customerList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.searchByName;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, fname);
+			rs = prest.executeQuery();
+
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				customerList = new Traveller[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Traveller p = new Traveller();
+					// p.setPersonId(Integer.parseInt(rs.getString("personId")));
+					p.setfName(fname);
+					p.setlName(rs.getString(1));
+					p.setAddress(rs.getString(2));
+					p.setState(rs.getString(3));
+					p.setCity(rs.getString(4));
+					p.setZipCode(rs.getString(5));
+					p.setDob(rs.getString(6));
+					System.out.println("there");
+					// p.setActive(Integer.parseInt(rs.getString(9)));
+					// p.setRoleId(rs.getString(10));
+					p.setCustId(rs.getString("custId"));
+					p.setPassNum(rs.getString(8));
+					p.setNationality(rs.getString(9));
+					p.setCreditCardNum(rs.getString(10));
+					customerList[currRow] = p;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public Traveller[] searchByLastName(String lname) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Traveller[] customerList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.searchByLastName;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, lname);
+			rs = prest.executeQuery();
+
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				customerList = new Traveller[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Traveller p = new Traveller();
+					// p.setPersonId(Integer.parseInt(rs.getString(1)));
+					p.setfName(rs.getString(1));
+					p.setlName(lname);
+					p.setAddress(rs.getString(2));
+					p.setState(rs.getString(3));
+					p.setCity(rs.getString(4));
+					p.setZipCode(rs.getString(5));
+					p.setDob(rs.getString(6));
+					System.out.println("there");
+					// p.setActive(Integer.parseInt(rs.getString(9)));
+					// p.setRoleId(rs.getString(10));
+					p.setCustId(rs.getString(7));
+					p.setPassNum(rs.getString(8));
+					customerList[currRow] = p;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public Traveller[] searchByState(String state) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Traveller[] customerList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.searchByState;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, state);
+			rs = prest.executeQuery();
+
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				customerList = new Traveller[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Traveller p = new Traveller();
+					// p.setPersonId(Integer.parseInt(rs.getString(1)));
+					p.setfName(rs.getString(1));
+					p.setlName(rs.getString(2));
+					p.setAddress(rs.getString(3));
+					p.setState(state);
+					p.setCity(rs.getString(4));
+					p.setZipCode(rs.getString(5));
+					p.setDob(rs.getString(6));
+					System.out.println("there");
+					// p.setActive(Integer.parseInt(rs.getString(9)));
+					// p.setRoleId(rs.getString(10));
+					p.setCustId(rs.getString(7));
+					p.setPassNum(rs.getString(8));
+					customerList[currRow] = p;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public Traveller[] searchByCity(String city) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Traveller[] customerList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.searchByCity;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, city);
+			rs = prest.executeQuery();
+
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				customerList = new Traveller[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Traveller p = new Traveller();
+					// p.setPersonId(Integer.parseInt(rs.getString(1)));
+					p.setfName(rs.getString(1));
+					p.setlName(rs.getString(2));
+					p.setAddress(rs.getString(3));
+					p.setState(rs.getString(4));
+					p.setCity(city);
+					p.setZipCode(rs.getString(5));
+					p.setDob(rs.getString(6));
+					System.out.println("there");
+					// p.setActive(Integer.parseInt(rs.getString(9)));
+					// p.setRoleId(rs.getString(10));
+					p.setCustId(rs.getString(7));
+					p.setPassNum(rs.getString(8));
+					customerList[currRow] = p;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public Traveller[] viewProfile(String username) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Traveller[] customerList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.viewProfile;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, username);
+			rs = prest.executeQuery();
+
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				customerList = new Traveller[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Traveller p = new Traveller();
+					// p.setPersonId(Integer.parseInt(rs.getString(1)));
+					p.setfName(rs.getString(2));
+					p.setlName(rs.getString(3));
+					p.setAddress(rs.getString(4));
+					p.setState(rs.getString(6));
+					p.setCity(rs.getString(5));
+					p.setZipCode(rs.getString(7));
+					p.setDob(rs.getString(8));
+					System.out.println("there");
+					// p.setActive(Integer.parseInt(rs.getString(9)));
+					// p.setRoleId(rs.getString(10));
+					p.setCustId(rs.getString(13));
+					p.setPassNum(rs.getString(15));
+					p.setNationality(rs.getString(16));
+					p.setCreditCardNum(rs.getString(17));
+					customerList[currRow] = p;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return customerList;
+		// return "Hi";
+	}
+
+	public String deleteAccount(String username) {
+		Connection con = null;
+		int rs = 0;
+		PreparedStatement prest = null;
+		String result = null;
+
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.deleteAccount;
+			prest = con.prepareStatement(prepStatement);
+			prest.setString(1, username);
+			rs = prest.executeUpdate();
+			CacheObject.getCachedCustomers();
+			if (rs > 0) {
+				result = "Account Deactivated";
+				System.out.println("Update Successful!!!");
+			} else
+				result = "Error In Account Deactivation";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public boolean createJourney(Journey journey) {
+		Connection con = null;
+		PreparedStatement prest = null;
+		boolean result = true;
+		try {
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.insertCustomerJourney;
+				prest = con.prepareStatement(prepStatement);
+				System.out.println("*****Inserting Customer Journey******");
+
+				prest.setString(1, journey.getCustId());
+				prest.setString(2, journey.getFlightNum());
+				prest.setString(3, journey.getDestinationPoint());
+				prest.setString(4, journey.getBoardingPoint());
+				prest.setString(5, journey.getDepartureDate());
+				prest.setString(6, journey.getArrivalDate());
+				prest.setFloat(7, journey.getFare());
+				prest.executeUpdate();
+				System.out.println("****Journey Added****");
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			result = false;
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public boolean issueTicket(Ticket ticket) {
+		Connection con = null;
+		PreparedStatement prest = null;
+		boolean result = true;
+		try {
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.insertCustomerTicket;
+				prest = con.prepareStatement(prepStatement);
+				System.out.println("*****Inserting Ticket Info******");
+
+				prest.setInt(1, ticket.getTicketNum());
+				prest.setString(2, ticket.getSeatNum());
+				prest.setInt(3, ticket.getJourneyId());
+				prest.setString(4, ticket.getPaymentId());
+				prest.executeUpdate();
+				System.out.println("****Ticket Inserted****");
+
+				if (result)
+					result = createReservation(ticket);
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			// result = false;
+			result = false;
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public boolean createReservation(Ticket ticket) {
+		Connection con = null;
+		PreparedStatement prest = null;
+		boolean result = true;
+		try {
+
+			con = DBManager.getConnection();
+			if (con != null) {
+				System.out.println("Creating DB Connection");
+				String prepStatement = SQLquery.insertCustomerReservation;
+				prest = con.prepareStatement(prepStatement);
+				System.out.println("*****Inserting Customer reservation******");
+
+				prest.setInt(1, ticket.getJourneyId());
+				prest.setString(2, (new java.util.Date().toString()));
+				prest.setString(3, ticket.getPaymentId());
+				prest.setInt(4, ticket.getTicketNum());
+				prest.executeUpdate();
+				System.out.println("****Reservation Inserted****");
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			result = false;
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	public static Reservation[] getAllReservations() {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		Reservation[] reservationList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.getAllReservations;
+			prest = con.prepareStatement(prepStatement);
+
+			rs = prest.executeQuery();
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				reservationList = new Reservation[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("here");
+					Reservation reservation = new Reservation();
+					reservation.setReservationId(Integer.parseInt(rs
+							.getString("reservationId")));
+					reservation.setJourneyId(Integer.parseInt(rs
+							.getString("journeyId")));
+					reservation.setReservationDate(rs
+							.getString("reservationDate"));
+					reservation.setPaymentId(Integer.parseInt(rs
+							.getString("paymentId")));
+
+					System.out.println("there1");
+					reservationList[currRow] = reservation;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return reservationList;
+		// return "Hi";
+	}
+
+	// private boolean validateFields(Traveller traveller) {
+	//
+	// Validations validations = new Validations();
+	// if (validations.verifyString(traveller.getfName())
+	// && validations.verifyString(traveller.getlName())
+	// && validations.verifyString(traveller.getCity())
+	// && validations.verifyString(traveller.getState())
+	// && validations.verifyZipCode(traveller.getZipCode())
+	// && validations.verifyDate(traveller.getDob(), "MM-dd-yyyy")
+	// && validations.verifyContactNo(traveller.getContactNo())
+	// // && validations.verifyStringAndInt(traveller.getUserName())
+	// ) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// }
+
+	public int getPersonId(Connection con) {
+
+		int personId = 0;
+		String query = SQLquery.getMaxPersonId;
+		Statement stmt = null;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				personId = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return personId;
+	}
+
+}

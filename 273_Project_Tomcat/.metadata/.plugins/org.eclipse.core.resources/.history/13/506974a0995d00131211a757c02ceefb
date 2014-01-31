@@ -1,0 +1,50 @@
+package com.airlinemgmt.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.airlinemgmt.DB.DBManager;
+import com.airlinemgmt.beans.Person;
+
+public class PersonDAO {
+
+	public Person validateUser(String userName, String password) {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		Person personObj = null;
+		try {
+			String sql = "SELECT * FROM PERSON WHERE USERNAME =(?) AND PASSWORD =(?)";
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, userName);
+			ps.setString(2, password);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				if (rs.getString("IsActive").equalsIgnoreCase("1")) {
+
+					personObj = new Person();
+					personObj.setPersonId(rs.getInt("PersonId"));
+					personObj.setfName(rs.getString("FName"));
+					personObj.setlName(rs.getString("LName"));
+					personObj.setCity(rs.getString("Address"));
+					personObj.setState(rs.getString("State"));
+					personObj.setZipCode(rs.getString("ZipCode"));
+					personObj.setDob(rs.getString("DOB"));
+					personObj.setRoleId(rs.getString("RoleId"));
+					personObj.setContactNo(rs.getString("contactNo"));
+					personObj.setUserName(rs.getString("userName"));
+					personObj.setPassword(rs.getString("password"));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
+}

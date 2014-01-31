@@ -1,0 +1,64 @@
+package com.airlinemgmt.controller;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+public class UpdateDeleteEmployee extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private AirlineEmployee airlineEmployee;
+	private AirlineMgmtServiceProxy proxy;
+       
+    public UpdateDeleteEmployee() {
+        super();
+        airlineEmployee = new AirlineEmployee();
+        proxy = new AirlineMgmtServiceProxy();
+        proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		processRequest(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		airlineEmployee.setFName(request.getParameter("fName"));
+		airlineEmployee.setLName(request.getParameter("lName"));
+		airlineEmployee.setAddress(request.getParameter("address"));
+		airlineEmployee.setCity(request.getParameter("city"));
+		airlineEmployee.setState(request.getParameter("state"));
+		airlineEmployee.setZipCode(request.getParameter("zipCode"));
+		airlineEmployee.setDob(request.getParameter("dob"));
+		airlineEmployee.setContactNo(request.getParameter("contactNo"));
+		airlineEmployee.setWorkDesc(request.getParameter("workDesc"));
+		airlineEmployee.setHireDate(request.getParameter("hireDate"));
+		airlineEmployee.setPosition(request.getParameter("workPosition"));
+		processRequest(request, response);
+	}
+
+	private void processRequest(HttpServletRequest request,HttpServletResponse response) {
+
+		String operation = request.getParameter("updateDelete");
+		
+		if(operation.equalsIgnoreCase("update")){
+			try {
+				proxy.addUpdateEmployee(airlineEmployee, "update");
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			
+		} else if(operation.equals("delete")){
+			try {
+				proxy.addUpdateEmployee(airlineEmployee, request.getParameter("personId"));
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}	
+}

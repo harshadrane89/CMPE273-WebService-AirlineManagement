@@ -1,0 +1,90 @@
+package com.airlinemgmt.container;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.airlinemgmt.beans.Journey;
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.beans.Traveller;
+
+/**
+ * Servlet implementation class PassengerInfoServlet
+ */
+public class PassengerInfoServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public PassengerInfoServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		
+		HttpSession session=request.getSession();
+		List<Traveller> travellerObj=(List<Traveller>)session.getAttribute("passengerList");
+		int index=0;
+		for(int i=0;i<travellerObj.size();i++)
+		{
+			
+			if(request.getParameter(i+"")!=null)
+			{
+				index=i;
+				break;
+			}
+		}
+		
+		travellerObj.remove(index);
+		session.setAttribute("passengerList", travellerObj);
+		session.setAttribute("destination", "/TwitterGUI/PassengerInfo.jsp");
+		session.setAttribute("leftNavBar", null);
+		response.sendRedirect("TwitterGUI/Dashboard.jsp");
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession();
+		Traveller traveller = new Traveller();
+		traveller.setfName(request.getParameter("fName"));
+		traveller.setlName(request.getParameter("lName"));
+		traveller.setNationality(request.getParameter("idType"));
+		traveller.setPassNum(request.getParameter("idNum"));
+
+		List<Traveller> passengerInfo=null;
+		if( session.getAttribute("passengerList")!=null||((List<Traveller>)session.getAttribute("passengerList")).size()>0){
+		passengerInfo = new ArrayList<Traveller> ();
+		}
+		else
+		{
+			passengerInfo   =(List<Traveller>)session.getAttribute("passengerList");
+		}
+		
+		passengerInfo.add(traveller);
+		session.setAttribute("passengerList", passengerInfo);
+		session.setAttribute("destination", "/TwitterGUI/PassengerInfo.jsp");
+		response.sendRedirect("TwitterGUI/Dashboard.jsp");
+	}
+
+}

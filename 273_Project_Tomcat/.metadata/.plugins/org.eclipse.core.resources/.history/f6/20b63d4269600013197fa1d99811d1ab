@@ -1,0 +1,131 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.util.*" %>
+        <%@ page import="java.sql.*" %>
+           <%@ page import="com.airlinemgmt.beans.AirlineEmployee" %>
+              <%@ page import="com.airlinemgmt.beans.FlightDetails" %>
+                <%@ page import="com.airlinemgmt.service.AirlineMgmtServiceProxy" %>
+   
+              
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<title>Flight Details</title>
+<style>
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Employee</title>
+</head>
+<body>
+ <form method ="post" name = "myForm" action="EmployeeServlet">
+ <div id="canvas">
+			<div id="header">
+				<div class="oferte_content">
+					<h1>Airline Management System</h1>
+				</div>
+				<!-- end of oferte_content-->
+			</div>
+			<div id="main_content">
+			<div id="menu_tab" style="padding-left: 137px">
+					<div class="left_menu_corner"></div>
+					<ul class="menu">
+					<li><a href="FlightDetails.jsp" class="nav1"> Search Flight</a></li>
+					<li class="divider"></li>
+				    <li><a href="AddNewFlight.jsp" class="nav2"> Add New Flight Details</a></li>
+					<li class="divider"></li>
+					<li><a href="FlightDetails.jsp" class="nav3"> Get All Flight Details</a></li>
+					<li class="divider"></li>							
+							
+					
+
+					</ul>
+					<div class="right_menu_corner"></div>
+					
+					
+				</div>
+				</div> <!--  div canvas -->
+				<fieldset style="width:600">
+
+		
+	<div class="center_content">
+					<div class="center_title_bar">All Flight Details</div>
+					<div class="prod_box">
+						<TABLE style="border-collapse: collapse; border-spacing: 0"
+							width="60%">
+							<TR>
+								<TD>
+									<div class="center_prod_box">
+										<div class="table_column_title">Flight Number</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										<div class="table_column_title">Origin</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										<div class="table_column_title">Destination</div>
+									</div>
+								</TD>
+							</TR>
+
+
+							<%
+						    FlightDetails flightDetails[];								
+								AirlineMgmtServiceProxy   proxy = new AirlineMgmtServiceProxy();								
+						       proxy.setEndpoint("http://localhost:8080/AirlineManagementSystem/services/AirlineMgmtService");
+
+							flightDetails = proxy.getAllFlights();
+							int itmCnt = 0;
+								try{
+								for (int i = 0; i < flightDetails.length; i++) {
+	%>
+							<TR>
+								<TD>
+									
+											<%
+												out.print(flightDetails[i].getFlightNum());
+											%>
+										
+								</TD>
+
+								<TD>		<%
+											out.print(flightDetails[i].getSrc());
+											%>
+										</TD>
+								<TD>
+											<%
+											out.print(flightDetails[i].getDest());
+											%><br>
+										</TD>
+
+							</TR>
+						</TABLE>
+						<%
+							}
+							
+}catch(Exception e)
+{
+System.out.println("Exception:"+e);	
+}
+						%>
+					</div>
+				</div>
+				<!-- end of center content -->
+		
+				
+			</div><!-- End of div main_content -->
+	</fieldset>
+  </form>
+</body>
+</html>

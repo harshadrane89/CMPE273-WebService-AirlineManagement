@@ -1,0 +1,511 @@
+package com.airlinemgmt.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.airlinemgmt.DB.DBManager;
+import com.airlinemgmt.SQLqueries.SQLquery;
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.cache.CacheObject;
+import com.airlinemgmt.validations.Validations;
+
+public class EmployeeDAO {
+
+	private Connection conn = null;
+
+	public AirlineEmployee searchEmployeeById(String empId) {
+
+		AirlineEmployee emp = null;
+		try {
+			if (conn != null) {
+				PreparedStatement stmt = conn
+						.prepareStatement(SQLquery.searchPersonById);
+				stmt.setInt(1, Integer.parseInt(empId));
+				ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+					emp = new AirlineEmployee();
+					emp.setEmpId(rs.getString("EmpId"));
+					emp.setPersonId(rs.getInt("PersonId"));
+					emp.setSSN(rs.getString("SSN"));
+					emp.setfName(rs.getString("FName"));
+					emp.setlName(rs.getString("LName"));
+					emp.setAddress(rs.getString("Address"));
+					emp.setCity(rs.getString("City"));
+					emp.setState(rs.getString("State"));
+					emp.setZipCode(rs.getString("ZipCode"));
+					emp.setDob(rs.getString("DOB"));
+					emp.setIsActive(rs.getInt("IsActive"));
+					emp.setRoleId(rs.getString("RoleId"));
+					emp.setUserName(rs.getString("userName"));
+					emp.setPassword(rs.getString("password"));
+					emp.setContactNo(rs.getString("contactNo"));
+					emp.setWorkDesc(rs.getString("WorkDesc"));
+					emp.setHireDate(rs.getString("HireDate"));
+					emp.setPosition(rs.getString("WorkPosition"));
+				}
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return emp;
+	}
+
+	public EmployeeDAO() {
+		try {
+			conn = DBManager.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	
+	public String validateFields(AirlineEmployee employee)  {
+		
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		String errorMessage = "true";
+		Validations validations = new Validations();
+
+		if (!validations.verifyString(employee.getfName()))
+			return errorMessage = "Incorrect First Name";
+
+		if (!validations.verifyString(employee.getlName()))
+			return errorMessage = "Incorrect Last Name";
+
+		if (!validations.verifySSN(employee.getSSN()))
+			return errorMessage = "Incorrect SSN";
+
+		if (!validations.verifyDateOfBirth(employee.getDob()))
+			return errorMessage = "Incorrect Date Of Birth";
+
+		if (!validations.verifyContactNo(employee.getContactNo()))
+			return errorMessage = "Incorrect Contact Number";
+
+		if (!validations.verifyString(employee.getAddress()))
+			return errorMessage = "Incorrect Address";
+
+		if (!validations.verifyString(employee.getCity()))
+			return errorMessage = "Incorrect City";
+
+		if (!validations.verifyString(employee.getState()))
+			return errorMessage = "Incorrect State";
+
+		if (!validations.verifyZipCode(employee.getZipCode()))
+			return errorMessage = "Incorrect Zip Code";
+
+		if (!validations.verifyString(employee.getPosition()))
+			return errorMessage = "Incorrect Position";
+
+		if (employee.getWorkDesc() == null
+				|| employee.getWorkDesc().trim().equalsIgnoreCase(""))
+			return errorMessage = "Incorrect Work Description";
+
+		if (!validations.verifyDateOfBirth(employee.getHireDate()))
+			return errorMessage = "Incorrect Hire Date";
+
+		if (!validations.validateUserName(employee.getUserName()))
+			return errorMessage = "Incorrect UserName";
+
+		if (employee.getPassword() == null
+				|| employee.getPassword().trim().equalsIgnoreCase(""))
+			return errorMessage = "Incorrect Password";
+
+		return errorMessage;
+	}
+
+	
+	
+	public boolean insertEmployee(AirlineEmployee employee) {
+		
+		
+		
+		try {
+			if (conn != null) {
+				String insertPersonQuery = SQLquery.insertPersonDetail;
+				PreparedStatement statement = conn
+						.prepareStatement(insertPersonQuery);
+				System.out.println("*****Employee SSN******"
+						+ employee.getSSN());
+				// if (validateFields(employee) &&
+				// validateSSN(employee.getSSN()))
+				{
+
+					statement.setString(1, employee.getfName());
+					statement.setString(2, employee.getlName());
+					statement.setString(3, employee.getAddress());
+					statement.setString(4, employee.getCity());
+					statement.setString(5, employee.getState());
+					statement.setString(6, employee.getZipCode());
+
+//					SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+//					java.util.Date date = sdf1.parse(employee.getDob());
+//					java.sql.Date sqlStartDate = new Date(date.getTime());
+					statement.setString(7, employee.getDob());
+
+					statement.setString(8, "0"); // roleId0 for employee, 1 for
+													// travellers
+					statement.setInt(9, 1); // is active
+					statement.setString(10, employee.getContactNo());
+					statement.setString(11, employee.getUserName());
+					statement.setString(12, employee.getPassword());
+					statement.executeUpdate();
+
+					String insertAirlineEmployeeQuery = SQLquery.insertAirlineEmploee;
+					PreparedStatement statement1 = conn
+							.prepareStatement(insertAirlineEmployeeQuery);
+					statement1.setInt(1, getPersonId());
+					statement1.setString(2, employee.getWorkDesc());
+
+//					date = sdf1.parse(employee.getHireDate());
+//					sqlStartDate = new Date(date.getTime());
+					statement1.setString(3, employee.getHireDate());
+
+					statement1.setString(4, employee.getPosition());
+					statement1.setString(5, employee.getSSN());
+					statement1.executeUpdate();
+					
+					CacheObject.empList.add(employee);
+					CacheObject.airlineEmployee = new AirlineEmployee[CacheObject.empList
+							.size()];
+					for (int i = 0; i < CacheObject.empList.size(); i++) {
+						AirlineEmployee emp = CacheObject.empList.get(i);
+						CacheObject.airlineEmployee[i] = emp;
+					}
+					
+					return true;
+				}
+				// else
+				// {
+				// return false;
+				// }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+//	private boolean validateFields(AirlineEmployee employee) {
+//
+//		Validations validations = new Validations();
+//		if (validations.verifyString(employee.getfName())
+//				&& validations.verifyString(employee.getlName())
+//				&& validations.verifyString(employee.getCity())
+//				&& validations.verifyString(employee.getState())
+//				&& validations.verifyZipCode(employee.getZipCode())
+//				&& validations.verifyDate(employee.getDob(), "MM-dd-yyyy")
+//				&& validations.verifyContactNo(employee.getContactNo())
+//				&& validations.verifyString(employee.getWorkDesc())
+//				&& validations.verifyDate(employee.getHireDate(), "MM-dd-yyyy")
+//				&& validations.verifyString(employee.getPosition())
+//		// && validations.verifyStringAndInt(employee.getUserName())
+//		) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+
+	private boolean validateSSN(String SSN) {
+
+		Validations validations = new Validations();
+		try {
+			if (validations.verifySSN(SSN)) {
+
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+	public boolean updateEmployee(AirlineEmployee employee) {
+
+		try {
+			if (conn != null) {
+				String updatePersonQuery = SQLquery.updatePerson;
+				PreparedStatement statement = conn
+						.prepareStatement(updatePersonQuery);
+
+				// if (validateFields(employee))
+				{
+					statement.setString(1, employee.getfName());
+					statement.setString(2, employee.getlName());
+					statement.setString(3, employee.getAddress());
+					statement.setString(4, employee.getCity());
+					statement.setString(5, employee.getState());
+					statement.setString(6, employee.getZipCode());
+
+//					SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+//					java.util.Date date = sdf1.parse(employee.getDob());
+//					java.sql.Date sqlStartDate = new Date(date.getTime());
+					statement.setString(7, employee.getDob());
+
+					statement.setString(8, employee.getContactNo());
+					statement.setInt(9, employee.getPersonId());
+					statement.executeUpdate();
+
+					PreparedStatement statement1 = conn
+							.prepareStatement(SQLquery.updateEmployee);
+					statement1.setString(1, employee.getWorkDesc());
+
+//					SimpleDateFormat sdf2 = new SimpleDateFormat("MM-dd-yyyy");
+//					date = sdf2.parse(employee.getHireDate());
+//					sqlStartDate = new Date(date.getTime());
+					statement1.setString(2, employee.getHireDate());
+
+					statement1.setString(3, employee.getPosition());
+					statement1.setInt(4, employee.getPersonId());
+					statement1.executeUpdate();
+					
+					CacheObject.empList.add(employee);
+					CacheObject.airlineEmployee = new AirlineEmployee[CacheObject.empList
+							.size()];
+					for (int i = 0; i < CacheObject.empList.size(); i++) {
+						AirlineEmployee emp = CacheObject.empList.get(i);
+						CacheObject.airlineEmployee[i] = emp;
+					}
+					
+					// return true;
+				}
+				// else {
+				// return false;
+				// }
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		return false;
+	}
+
+	public boolean deleteEmployee(int personId) {
+		PreparedStatement statement = null;
+		try {
+			if (conn != null) {
+				statement = conn.prepareStatement(SQLquery.deletePerson);
+				statement.setInt(1, personId);
+				statement.executeUpdate();
+				CacheObject.getCachedEmployees();
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+
+	public int getPersonId() {
+
+		int personId = 0;
+		String query = SQLquery.getMaxPersonId;
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				personId = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return personId;
+	}
+
+	public AirlineEmployee[] searchEmployee(AirlineEmployee emp) {
+		AirlineEmployee[] empArray = null;
+		if(emp==null)
+		{
+			empArray = CacheObject.airlineEmployee;
+		}
+		else{
+		try {
+			if (conn != null) {
+				String sql = "select * from person p, airlineemployee a where p.PersonId = a.PersonId AND p.IsActive=1 ";
+
+				String addCriteria = "";
+				if (emp != null) {
+					System.out.println(emp.getfName());
+					if (!emp.getfName().equalsIgnoreCase("")) {
+						addCriteria += "AND p.FName like '%" + emp.getfName()
+								+ "%' ";
+					}
+					if (!emp.getlName().equalsIgnoreCase("")) {
+						addCriteria += "AND p.LName like '%" + emp.getlName()
+								+ "%' ";
+					}
+
+					if (!emp.getSSN().equalsIgnoreCase("")) {
+						addCriteria += "AND a.SSN like '%" + emp.getSSN()
+								+ "%' ";
+					}
+					if (!emp.getAddress().equalsIgnoreCase("")) {
+						addCriteria += "AND p.Address like '%"
+								+ emp.getAddress() + "%' ";
+					}
+					if (!emp.getCity().equalsIgnoreCase("")) {
+						addCriteria += "AND p.City like '%" + emp.getCity()
+								+ "%' ";
+					}
+					if (!emp.getState().equalsIgnoreCase("")) {
+						addCriteria += "AND p.State like '%" + emp.getState()
+								+ "%' ";
+					}
+					if (!emp.getZipCode().equalsIgnoreCase("")) {
+						addCriteria += "AND p.ZipCode like '%"
+								+ emp.getZipCode() + "%' ";
+					}
+					if (!emp.getDob().equalsIgnoreCase("")) {
+						addCriteria += "AND p.DOB = " + emp.getDob() + " ";
+					}
+					if (!emp.getContactNo().equalsIgnoreCase("")) {
+						addCriteria += "AND p.contactNo like '%'"
+								+ emp.getContactNo() + "%' ";
+					}
+					if (!emp.getWorkDesc().equalsIgnoreCase("")) {
+
+						addCriteria += "AND a.WorkDesc like '%"
+								+ emp.getWorkDesc() + "%' ";
+					}
+					if (!emp.getPosition().equalsIgnoreCase("")) {
+						addCriteria += "AND a.WorkPosition like '%"
+								+ emp.getPosition() + "%' ";
+					}
+					if (emp.getHireDate() != null
+							&& !emp.getHireDate().equalsIgnoreCase("")) {
+						addCriteria = "AND a.HireDate = " + emp.getHireDate()
+								+ " ";
+					}
+				}
+				sql += addCriteria;
+				System.out.println(sql);
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery();
+				List<AirlineEmployee> empList = new ArrayList<AirlineEmployee>();
+				AirlineEmployee ref = null;
+				while (rs.next()) {
+					ref = new AirlineEmployee();
+					ref.setEmpId(rs.getString("EmpId"));
+					ref.setPersonId(rs.getInt("PersonId"));
+					ref.setSSN(rs.getString("SSN"));
+					ref.setfName(rs.getString("FName"));
+					ref.setlName(rs.getString("LName"));
+					ref.setAddress(rs.getString("Address"));
+					ref.setCity(rs.getString("City"));
+					ref.setState(rs.getString("State"));
+					ref.setZipCode(rs.getString("ZipCode"));
+					ref.setDob(rs.getString("DOB"));
+					ref.setIsActive(rs.getInt("IsActive"));
+					ref.setRoleId(rs.getString("RoleId"));
+					ref.setUserName(rs.getString("userName"));
+					ref.setPassword(rs.getString("password"));
+					ref.setContactNo(rs.getString("contactNo"));
+					ref.setWorkDesc(rs.getString("WorkDesc"));
+					ref.setHireDate(rs.getString("HireDate"));
+					ref.setPosition(rs.getString("WorkPosition"));
+					empList.add(ref);
+				}
+
+				empArray = new AirlineEmployee[empList.size()];
+
+				int counter = 0;
+				for (AirlineEmployee refObj : empList) {
+					empArray[counter++] = refObj;
+				}
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		}
+
+		return empArray;
+	}
+
+	public static AirlineEmployee[] getAllEmployees() {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement prest = null;
+		AirlineEmployee[] employeeList = null;
+		int size;
+		try {
+			con = DBManager.getConnection();
+			System.out.println("Creating DB Connection");
+			String prepStatement = SQLquery.getAllEmployees;
+			prest = con.prepareStatement(prepStatement);
+
+			rs = prest.executeQuery();
+			if (rs != null) {
+				rs.last();
+				size = rs.getRow();
+				if (size == 0) {
+					return null;
+				}
+				employeeList = new AirlineEmployee[size];
+				int currRow = 0;
+				rs.beforeFirst();
+
+				while (rs.next()) {
+					System.out.println("Caching Employee");
+					AirlineEmployee ref = new AirlineEmployee();
+					ref.setEmpId(rs.getString("EmpId"));
+					ref.setPersonId(rs.getInt("PersonId"));
+					ref.setSSN(rs.getString("SSN"));
+					ref.setfName(rs.getString("FName"));
+					ref.setlName(rs.getString("LName"));
+					ref.setAddress(rs.getString("Address"));
+					ref.setCity(rs.getString("City"));
+					ref.setState(rs.getString("State"));
+					ref.setZipCode(rs.getString("ZipCode"));
+					ref.setDob(rs.getString("DOB"));
+					ref.setIsActive(rs.getInt("IsActive"));
+					ref.setRoleId(rs.getString("RoleId"));
+					ref.setUserName(rs.getString("userName"));
+					ref.setPassword(rs.getString("password"));
+					ref.setContactNo(rs.getString("contactNo"));
+					ref.setWorkDesc(rs.getString("WorkDesc"));
+					ref.setHireDate(rs.getString("HireDate"));
+					ref.setPosition(rs.getString("WorkPosition"));
+					employeeList[currRow] = ref;
+					currRow++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prest != null)
+					prest.close();
+				if (con != null)
+					con.close(); // return to pool
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return employeeList;
+		// return "Hi";
+	}
+
+}

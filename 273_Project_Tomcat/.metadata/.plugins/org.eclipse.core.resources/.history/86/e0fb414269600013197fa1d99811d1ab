@@ -1,0 +1,241 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.util.*" %>
+        <%@ page import="java.sql.*" %>
+           <%@ page import="com.airlinemgmt.beans.AirlineEmployee" %>
+              <%@ page import="com.airlinemgmt.beans.FlightDetails" %>
+                <%@ page import="com.airlinemgmt.service.AirlineMgmtServiceProxy" %>
+            <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+   
+              
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<title>Flight Details</title>
+<style>
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Employee</title>
+</head>
+<body>
+ <form method ="post" name = "myForm" action="FlightDetailsServlet">
+ <div id="canvas">
+			<div id="header">
+				<div class="oferte_content">
+					<h1>Airline Management System</h1>
+				</div>
+				<!-- end of oferte_content-->
+			</div>
+			<div id="main_content">
+			<div id="menu_tab" style="padding-left: 137px">
+					<div class="left_menu_corner"></div>
+					<ul class="menu">
+					<li><a href="FlightDetails.jsp" class="nav1"> Search Flight</a></li>
+					<li class="divider"></li>
+				    <li><a href="AddNewFlight.jsp" class="nav2"> Add New Flight Details</a></li>
+					<li class="divider"></li>
+					<li><a href="FlightDetails.jsp" class="nav3"> Get All Flight Details</a></li>
+					<li class="divider"></li>							
+							
+					
+
+					</ul>
+					<div class="right_menu_corner"></div>
+					
+					
+				</div>
+				</div> <!--  div canvas -->
+				<fieldset style="width:600">
+			<div class="center_content">
+					<div class="center_title_bar">Search A Flight </div>
+					<div class="prod_box">
+
+
+						<TABLE style="border-collapse: collapse; border-spacing: 0"
+							width="60%">
+							
+							<TR>
+								<TD>
+									<div class="center_prod_box">
+
+										<div class="table_column_title">Airline Name</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="text" SIZE="25" NAME="txtAirline" >
+									</div>
+								</TD>
+								
+							</TR>
+							<TR>
+								<TD>
+									<div class="center_prod_box">
+
+										<div class="table_column_title">Flight Number</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="text" SIZE="25" NAME="txtFlightNum" >
+									</div>
+								</TD>
+								
+							</TR>
+							<TR>
+								<TD><div class="center_prod_box">
+										<div class="table_column_title">From</div>
+									</div></TD>
+									<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="text" SIZE="25" NAME="txtFrom" >
+									</div>
+								</TD>
+							</TR>
+							<TR>
+								<TD>
+									<div class="center_prod_box">
+										<div class="table_column_title">To</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="text" SIZE="25" NAME="txtDestination" >
+									</div>
+								</TD>
+							</TR>
+							<TR>
+								
+								<TD>
+									<div class="center_prod_box">
+										<div class="table_column_title">Date & Time</div>
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+									  <input type="text" maxlength="15" value="" NAME="txtDateTime" id="datetimepicker_mask" onchange="validate()"/><br><br>
+							
+									</div>
+								</TD>
+
+							</TR>
+							<TR>
+								
+								<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="submit" value="Search" SIZE="25" NAME="btnSearch" >
+									</div>
+								</TD>
+								<TD>
+									<div class="center_prod_box">
+										 <INPUT TYPE="button" value="Reset" SIZE="25" NAME="btnReset" >
+									</div>
+								</TD>
+
+							</TR>
+						</Table>
+
+
+					</div>
+				</div>
+				<!-- end of center content -->
+
+	</fieldset>
+	<fieldset>
+	<table id="tblFlightDetails">
+    <c:forEach var="flightDetails" items="${flightDetails}">
+        <tr>
+            <td>${flightDetails.airlineName}</td> 
+            <td>${flightDetails.noOfSeats}</td> 
+            <td>${flightDetails.src}</td>
+        </tr> 
+    </c:forEach>
+</table>
+	
+	</div>
+	</fieldset>
+	</div>
+  </form>
+</body>
+<script src="./jquery.js"></script>
+<script src="./jquery.datetimepicker.js"></script>
+<script type="text/javascript">
+function validate()
+{
+	var chkdate = document.getElementById("datetimepicker_mask").value
+	if(document.getElementById("datetimepicker_mask").value == "")
+	{
+		alert("Please enter the Date..!!")
+		if(chkdate.match(/^[0-9]{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/))
+		{
+		  alert('works out');
+		}
+		else
+		{
+			alert("date format is wrong")
+		}
+		return false
+	}	
+	else if(document.getElementById("from[]").value == "")
+	{
+		alert("Please enter the from value..!!")
+			return false
+	}
+	else{
+		return true
+	}
+}
+</script>
+<script>
+$('#datetimepicker_mask').datetimepicker({
+	mask:'9999/19/39 29:59',
+});
+$('#datetimepicker').datetimepicker();
+$('#datetimepicker').datetimepicker({value:'2015/04/15 05:06'});
+$('#datetimepicker1').datetimepicker({
+	datepicker:false,
+	format:'H:i',
+	step:5
+});
+$('#datetimepicker2').datetimepicker({
+	timepicker:false,
+	format:'d/m/Y',
+	formatDate:'Y/m/d',
+	minDate:'-1970/01/02', // yesterday is minimum date
+	maxDate:'+1970/01/02' // and tommorow is maximum date calendar
+});
+$('#datetimepicker3').datetimepicker({
+	inline:true
+});
+$('#datetimepicker4').datetimepicker();
+$('#open').click(function(){
+	$('#datetimepicker4').datetimepicker('show');
+});
+$('#close').click(function(){
+	$('#datetimepicker4').datetimepicker('hide');
+});
+$('#datetimepicker5').datetimepicker({
+	datepicker:false,
+	allowTimes:['12:00','13:00','15:00','17:00','17:05','17:20','19:00','20:00']
+});
+$('#datetimepicker6').datetimepicker();
+$('#destroy').click(function(){
+	if( $('#datetimepicker6').data('xdsoft_datetimepicker') ){
+		$('#datetimepicker6').datetimepicker('destroy');
+		this.value = 'create';
+	}else{
+		$('#datetimepicker6').datetimepicker();
+		this.value = 'destroy';
+	}
+});
+</script>
+</html>

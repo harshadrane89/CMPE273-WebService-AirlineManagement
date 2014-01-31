@@ -1,0 +1,8 @@
+package com.airlinemgmt.jms;
+
+public class Snippet {
+	public static void main(String[] args) {
+		com.airlinemgmt.beans
+	}
+}
+

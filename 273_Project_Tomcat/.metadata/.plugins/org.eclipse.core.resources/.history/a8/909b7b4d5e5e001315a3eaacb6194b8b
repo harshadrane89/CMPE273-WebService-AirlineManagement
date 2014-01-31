@@ -1,0 +1,86 @@
+package com.airlinemgmt.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.rmi.RemoteException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.beans.Traveller;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+/**
+ * Servlet implementation class CustomerServlet
+ */
+public class CustomerServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	private Traveller traveller;
+	private AirlineMgmtServiceProxy proxy;
+       
+    
+    public CustomerServlet() {
+    	traveller = new Traveller();
+        proxy = new AirlineMgmtServiceProxy();
+        proxy.setEndpoint("http://localhost:8080/AirlineManagement/services/AirlineMgmtService");
+    }
+    
+    private String processRequest() {
+    	
+    	try {
+			if(proxy.addUpdateCustomer(traveller, "insert")){
+				System.out.println("Add Customer success");
+				return "Registared successfully";
+				
+			} else {
+				System.out.println("Add Customer fails");
+				return "Registared failed";
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return "Registared failed";
+		}
+    }
+
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+	    response.setContentType("text/html");
+	    String result;
+		
+		traveller.setFName(request.getParameter("fName"));
+		traveller.setLName(request.getParameter("lName"));
+		traveller.setAddress(request.getParameter("address"));
+		traveller.setCity(request.getParameter("city"));
+		traveller.setState(request.getParameter("state"));
+		traveller.setZipCode(request.getParameter("zipCode"));
+		traveller.setDob(request.getParameter("dob"));
+		//airlineEmployee.setContactNo(request.getParameter("contactNo"));
+		
+		traveller.setCustId(request.getParameter("custId"));
+		traveller.setUserName((request.getParameter("username")));
+		traveller.setPassword(request.getParameter("pwd"));
+		traveller.setPassNum(request.getParameter("passNum"));
+		traveller.setNationality(request.getParameter("nationality"));
+		traveller.setCreditCardNum(request.getParameter("cerditCardnum"));
+		
+		
+		result = processRequest();
+		if(result.equalsIgnoreCase("Registared successfully")){
+			request.setAttribute("message", "Registared successfully");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Login.jsp");
+			dispatcher.forward(request, response);
+		}
+	}
+
+}

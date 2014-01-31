@@ -1,0 +1,43 @@
+package com.airlinemgmt.container;
+
+import java.rmi.RemoteException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+
+import com.airlinemgmt.beans.AirlineEmployee;
+import com.airlinemgmt.beans.Reservation;
+import com.airlinemgmt.beans.Traveller;
+import com.airlinemgmt.service.AirlineMgmtServiceProxy;
+
+/**
+ * Servlet implementation class StartUpServlet
+ */
+@WebServlet("/StartUpServlet")
+public class StartUpServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	public static Reservation[] reservationArr;
+
+	/**
+	 * @throws RemoteException
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public StartUpServlet() throws RemoteException {
+		System.out.println("*******Start Up Servlet Loaded*****");
+		
+		
+		System.out.println("****Employee Array Size*****"
+				+ reservationArr.length);
+
+	}
+
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+
+	}
+
+}

@@ -1,0 +1,92 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.airlinemgmt.beans.Reservation"%>
+<%@page import="com.airlinemgmt.beans.Traveller"%>
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+	pageEncoding="US-ASCII"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title></title>
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/datepicker.css" rel="stylesheet">
+<link href="css/prettify.css" rel="stylesheet">
+</head>
+<body>
+
+	<form action="../PassengerProcessor" method="post" class="well">
+		<center>
+			<h3>Passenger Info</h3>
+			<table cellpadding="10px" cellspacing="10px" class="table-striped">
+				<tr>
+					<td>Passenger Name</td>
+					<td><input type="text" placeholder="First Name" name="fName" class="form-control"></td>
+					<td><input type="text" placeholder="Last Name" name="lName" class="form-control"></td>
+				</tr>
+
+				<tr>
+					<td>ICard Type</td>
+					<td><input type="text" placeholder="ICard Type" name="idType" class="form-control"></td>
+				</tr>
+
+				<tr>
+					<td>ICard Info</td>
+					<td><input type="text" placeholder="ICard Number" name="idNum" class="form-control"></td>
+				</tr>
+
+			</table>
+			<br /> <br /> <input type="submit" class="btn btn-success"
+				value="Add">
+
+
+		</center>
+	</form>
+<center>
+	<%
+		if (session.getAttribute("passengerList") != null &&((ArrayList<Traveller>)session.getAttribute("passengerList")).size()>0	) {
+			ArrayList<Traveller> traveller=(ArrayList<Traveller>)session.getAttribute("passengerList");
+
+	%>
+	<table class="table-striped" cellpadding="10px" width="800px">
+
+		<thead>
+			<tr>
+				<td>Passenger Name</td>
+				<td>ICard Type</td>
+				<td>ICard Info</td>
+			</tr>
+		</thead>
+
+		<%
+			int i=0;
+			for (Traveller obj : traveller) {
+				if(obj!=null){
+		%>
+		<tr>
+			<td><%=obj.getfName()%>&nbsp;<%=obj.getlName()%>&nbsp;</td>
+			<td><%=obj.getNationality()%></td>
+			<td><%=obj.getPassNum()%></td>
+			<td><form action="../PassengerProcessor" method="get">
+			<input type="submit" value="Delete" class="btn btn-danger" name="<%=i%>">
+			</form>
+			</td>
+		</tr>
+
+		<%
+				}
+			i++;
+			}
+		%>
+
+	</table>
+	<%
+		}
+	%>
+	<br>
+	<br>
+	<br>
+	<br>
+	<a href="../TwitterGUI/TransactionInfo.jsp" class="btn btn-success" >Continue >> </a></center>
+	
+</body>
+</html>

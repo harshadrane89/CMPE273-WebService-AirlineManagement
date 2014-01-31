@@ -1,0 +1,11 @@
+package com.airlinemgmt.server;
+
+public  class MyClass {
+	
+	static{
+		"HERE";
+	}
+	
+	
+
+}

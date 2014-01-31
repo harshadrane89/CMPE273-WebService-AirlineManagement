@@ -1,0 +1,158 @@
+<ns1:deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns1="http://xml.apache.org/axis/wsdd/">
+ <ns1:globalConfiguration>
+  <ns1:parameter name="sendMultiRefs" value="true"/>
+  <ns1:parameter name="disablePrettyXML" value="true"/>
+  <ns1:parameter name="adminPassword" value="admin"/>
+  <ns1:parameter name="attachments.Directory" value="E:\Workspace\273_Project_Tomcat\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\AirlineManagementSystem\WEB-INF\attachments"/>
+  <ns1:parameter name="dotNetSoapEncFix" value="true"/>
+  <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
+  <ns1:parameter name="sendXMLDeclaration" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:requestFlow>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="session"/>
+   </ns1:handler>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="request"/>
+    <ns1:parameter name="extension" value=".jwr"/>
+   </ns1:handler>
+  </ns1:requestFlow>
+ </ns1:globalConfiguration>
+ <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <ns1:service name="AirlineMgmtService" provider="java:RPC" style="wrapped" use="literal">
+  <ns2:operation name="makePayment" qname="ns1:makePayment" returnQName="ns1:makePaymentReturn" returnType="xsd:int" soapAction="" xmlns:ns1="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/">
+   <ns3:parameter qname="ns1:payment" type="ns2:Payment" xmlns:ns2="http://beans.airlinemgmt.com" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+  </ns2:operation>
+  <ns1:operation name="issueTicket" qname="ns3:issueTicket" returnQName="ns3:issueTicketReturn" returnType="xsd:int" soapAction="" xmlns:ns3="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns3:journeyId" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="signIn" qname="ns4:signIn" returnQName="ns4:signInReturn" returnType="ns5:Person" soapAction="" xmlns:ns4="http://service.airlinemgmt.com" xmlns:ns5="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns4:uName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns4:passwd" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="addUpdateEmployee" qname="ns6:addUpdateEmployee" returnQName="ns6:addUpdateEmployeeReturn" returnType="xsd:boolean" soapAction="" xmlns:ns6="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns6:employee" type="ns7:AirlineEmployee" xmlns:ns7="http://beans.airlinemgmt.com"/>
+   <ns1:parameter qname="ns6:operation" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="getCustomerDetails" qname="ns8:getCustomerDetails" returnQName="ns8:getCustomerDetailsReturn" returnType="ns9:Traveller" soapAction="" xmlns:ns8="http://service.airlinemgmt.com" xmlns:ns9="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns8:input" type="ns9:Traveller"/>
+  </ns1:operation>
+  <ns1:operation name="setSessionInfo" qname="ns10:setSessionInfo" returnQName="ns10:setSessionInfoReturn" returnType="xsd:string" soapAction="" xmlns:ns10="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns10:username" type="xsd:string"/>
+   <ns1:parameter qname="ns10:loginTime" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="getSessionInfo" qname="ns11:getSessionInfo" returnQName="ns11:getSessionInfoReturn" returnType="xsd:string" soapAction="" xmlns:ns11="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns11:username" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="addUpdateCustomer" qname="ns12:addUpdateCustomer" returnQName="ns12:addUpdateCustomerReturn" returnType="xsd:boolean" soapAction="" xmlns:ns12="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns12:traveller" type="ns13:Traveller" xmlns:ns13="http://beans.airlinemgmt.com"/>
+   <ns1:parameter qname="ns12:operation" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="addUpdateJourneyDetails" qname="ns14:addUpdateJourneyDetails" returnQName="ns14:addUpdateJourneyDetailsReturn" returnType="xsd:int" soapAction="" xmlns:ns14="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns14:journey" type="ns15:Journey" xmlns:ns15="http://beans.airlinemgmt.com"/>
+   <ns1:parameter qname="ns14:operation" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="createNewReservation" qname="ns16:createNewReservation" returnQName="ns16:createNewReservationReturn" returnType="xsd:boolean" soapAction="" xmlns:ns16="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns16:ticketID" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="cancelledReservation" qname="ns17:cancelledReservation" returnQName="ns17:cancelledReservationReturn" returnType="xsd:boolean" soapAction="" xmlns:ns17="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns17:ticketID" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="getJourneyDetails" qname="ns18:getJourneyDetails" returnQName="ns18:getJourneyDetailsReturn" returnType="ns19:Journey" soapAction="" xmlns:ns18="http://service.airlinemgmt.com" xmlns:ns19="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns18:ticketID" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="getEmployeeDetails" qname="ns20:getEmployeeDetails" returnQName="ns20:getEmployeeDetailsReturn" returnType="ns21:AirlineEmployee" soapAction="" xmlns:ns20="http://service.airlinemgmt.com" xmlns:ns21="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns20:emp" type="ns21:AirlineEmployee"/>
+  </ns1:operation>
+  <ns1:operation name="getListOfFlightCustomers" qname="ns22:getListOfFlightCustomers" returnQName="ns22:getListOfFlightCustomersReturn" returnType="ns23:Traveller" soapAction="" xmlns:ns22="http://service.airlinemgmt.com" xmlns:ns23="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns22:flightNum" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="getAllFlights" qname="ns24:getAllFlights" returnQName="ns24:getAllFlightsReturn" returnType="ns25:FlightDetails" soapAction="" xmlns:ns24="http://service.airlinemgmt.com" xmlns:ns25="http://beans.airlinemgmt.com"/>
+  <ns1:operation name="addUpdateFlight" qname="ns26:addUpdateFlight" returnQName="ns26:addUpdateFlightReturn" returnType="xsd:boolean" soapAction="" xmlns:ns26="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns26:flight" type="ns27:FlightDetails" xmlns:ns27="http://beans.airlinemgmt.com"/>
+   <ns1:parameter qname="ns26:operation" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="getTravellerDetails" qname="ns28:getTravellerDetails" returnQName="ns28:getTravellerDetailsReturn" returnType="ns29:Traveller" soapAction="" xmlns:ns28="http://service.airlinemgmt.com" xmlns:ns29="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns28:personId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="getFlightDetails" qname="ns30:getFlightDetails" returnQName="ns30:getFlightDetailsReturn" returnType="ns31:FlightDetails" soapAction="" xmlns:ns30="http://service.airlinemgmt.com" xmlns:ns31="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns30:airlineName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns30:flightNum" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns30:src" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns30:dest" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns30:noOfSeats" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns30:flightDate" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="deleteAccount" qname="ns32:deleteAccount" returnQName="ns32:deleteAccountReturn" returnType="xsd:string" soapAction="" xmlns:ns32="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns32:username" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="createReservation" qname="ns33:createReservation" returnQName="ns33:createReservationReturn" returnType="xsd:boolean" soapAction="" xmlns:ns33="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns33:reservationObj" type="ns34:Reservation" xmlns:ns34="http://beans.airlinemgmt.com"/>
+  </ns1:operation>
+  <ns1:operation name="deleteJourney" qname="ns35:deleteJourney" returnQName="ns35:deleteJourneyReturn" returnType="xsd:boolean" soapAction="" xmlns:ns35="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns35:journeyId" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="searchJourney" qname="ns36:searchJourney" returnQName="ns36:searchJourneyReturn" returnType="ns37:Journey" soapAction="" xmlns:ns36="http://service.airlinemgmt.com" xmlns:ns37="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns36:journey" type="ns37:Journey"/>
+  </ns1:operation>
+  <ns1:operation name="getReservation" qname="ns38:getReservation" returnQName="ns38:getReservationReturn" returnType="ns39:Reservation" soapAction="" xmlns:ns38="http://service.airlinemgmt.com" xmlns:ns39="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns38:customerId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="deleteReservation" qname="ns40:deleteReservation" returnQName="ns40:deleteReservationReturn" returnType="xsd:boolean" soapAction="" xmlns:ns40="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns40:resId" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="updateJourneyDetails" qname="ns41:updateJourneyDetails" returnQName="ns41:updateJourneyDetailsReturn" returnType="xsd:boolean" soapAction="" xmlns:ns41="http://service.airlinemgmt.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns41:journeyObj" type="ns42:Journey" xmlns:ns42="http://beans.airlinemgmt.com"/>
+  </ns1:operation>
+  <ns1:operation name="getEmployeeDetailsById" qname="ns43:getEmployeeDetailsById" returnQName="ns43:getEmployeeDetailsByIdReturn" returnType="ns44:AirlineEmployee" soapAction="" xmlns:ns43="http://service.airlinemgmt.com" xmlns:ns44="http://beans.airlinemgmt.com">
+   <ns1:parameter qname="ns43:personId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="getSessionInfo searchJourney setSessionInfo getAllFlights getCustomerDetails deleteReservation createNewReservation getEmployeeDetails getReservation addUpdateCustomer makePayment getTravellerDetails getEmployeeDetailsById getJourneyDetails getListOfFlightCustomers getFlightDetails createReservation updateJourneyDetails deleteAccount addUpdateEmployee issueTicket deleteJourney addUpdateJourneyDetails cancelledReservation signIn addUpdateFlight"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="AirlineMgmtService"/>
+  <ns1:parameter name="className" value="com.airlinemgmt.service.AirlineMgmtService"/>
+  <ns1:parameter name="wsdlServicePort" value="AirlineMgmtService"/>
+  <ns1:parameter name="schemaQualified" value="http://service.airlinemgmt.com,http://beans.airlinemgmt.com"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://service.airlinemgmt.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="AirlineMgmtServiceService"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns45:Person" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.Person" xmlns:ns45="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns46:Traveller" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.Traveller" xmlns:ns46="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns47:FlightDetails" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.FlightDetails" xmlns:ns47="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns48:AirlineEmployee" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.AirlineEmployee" xmlns:ns48="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns49:Reservation" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.Reservation" xmlns:ns49="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns50:Journey" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.Journey" xmlns:ns50="http://beans.airlinemgmt.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns51:Payment" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.airlinemgmt.beans.Payment" xmlns:ns51="http://beans.airlinemgmt.com"/>
+  <ns1:arrayMapping innerType="ns53:Traveller" languageSpecificType="java:com.airlinemgmt.beans.Traveller[]" qname="ns52:ArrayOf_tns1_Traveller" xmlns:ns52="http://service.airlinemgmt.com" xmlns:ns53="http://beans.airlinemgmt.com"/>
+  <ns1:arrayMapping innerType="ns55:Journey" languageSpecificType="java:com.airlinemgmt.beans.Journey[]" qname="ns54:ArrayOf_tns1_Journey" xmlns:ns54="http://service.airlinemgmt.com" xmlns:ns55="http://beans.airlinemgmt.com"/>
+ </ns1:service>
+ <ns1:service name="AdminService" provider="java:MSG">
+  <ns1:parameter name="allowedMethods" value="AdminService"/>
+  <ns1:parameter name="enableRemoteAdmin" value="false"/>
+  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
+ </ns1:service>
+ <ns1:service name="Version" provider="java:RPC">
+  <ns1:parameter name="allowedMethods" value="getVersion"/>
+  <ns1:parameter name="className" value="org.apache.axis.Version"/>
+ </ns1:service>
+ <ns1:transport name="http">
+  <ns1:requestFlow>
+   <ns1:handler type="URLMapper"/>
+   <ns1:handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </ns1:requestFlow>
+  <ns1:parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <ns1:parameter name="qs.list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs.wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+ </ns1:transport>
+ <ns1:transport name="local">
+  <ns1:responseFlow>
+   <ns1:handler type="LocalResponder"/>
+  </ns1:responseFlow>
+ </ns1:transport>
+</ns1:deployment>

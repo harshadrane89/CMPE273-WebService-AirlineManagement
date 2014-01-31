@@ -1,0 +1,5 @@
+package com.airlinemgmt.server;
+
+public static class MyClass {
+
+}
